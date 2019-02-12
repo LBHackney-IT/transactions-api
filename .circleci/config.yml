@@ -35,7 +35,7 @@ workflows:
           aws-secret-access-key: $AWS_SECRET_KEY
           aws-region: $AWS_REGION
           family: 'transactions-api-staging'
-          cluster-name: $CLUSTER_NAME
+          cluster-name: '${CLUSTER_NAME}'
           container-image-name-updates: 'container=transactions-api-staging-service,tag=${CIRCLE_SHA1}'
           verify-revision-is-deployed: true
 #      - permit_production_release:
