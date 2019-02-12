@@ -1,0 +1,48 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@3.0.0
+  aws-ecs: circleci/aws-ecs@0.0.6
+
+#jobs:
+
+# CLUSTER_NAME
+# AWS_ECR_HOST
+# AWS_ECR_PATH
+# AWS_ID_KEY
+# AWS_SECRET_KEY
+# AWS_REGION
+
+workflows:
+  build_and_push_image:
+    jobs:
+      - aws-ecr/build_and_push_image:
+          account-url: AWS_ECR_HOST
+          repo: AWS_ECR_PATH
+          aws-access-key-id: AWS_ID_KEY
+          aws-secret-access-key: AWS_SECRET_KEY
+          region: AWS_REGION
+          tag: '${CIRCLE_SHA1}'
+          filters:
+            branches:
+              only: master
+      - aws-ecs/deploy-service-update:
+          name: deploy-staging
+          requires:
+            - aws-ecr/build_and_push_image
+          family: 'transactions-api-staging'
+          cluster-name: $CLUSTER_NAME
+          container-image-name-updates: 'container=transactions-api-staging-service,tag=${CIRCLE_SHA1}'
+          verify-revision-is-deployed: true
+#      - permit_production_release:
+#          type: approval
+#          requires:
+#            - deploy-staging
+#      - aws-ecs/deploy-service-update:
+#          name: deploy-production
+#          requires:
+#            - permit_production_release
+#          family: 'transactions-api-production'
+#          cluster-name: $CLUSTER_NAME
+#          container-image-name-updates: 'container=transactions-api-production-service,tag=${CIRCLE_SHA1}'
+#          verify-revision-is-deployed: true
