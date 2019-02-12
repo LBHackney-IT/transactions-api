@@ -23,9 +23,9 @@ workflows:
           aws-secret-access-key: AWS_SECRET_KEY
           region: AWS_REGION
           tag: '${CIRCLE_SHA1}'
-          filters:
-            branches:
-              only: master
+#          filters:
+#            branches:
+#              only: master
       - aws-ecs/deploy-service-update:
           name: deploy-staging
           requires:
