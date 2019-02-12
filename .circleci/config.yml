@@ -18,7 +18,7 @@ workflows:
     jobs:
       - aws-ecr/build_and_push_image:
           account-url: AWS_ECR_HOST
-          repo: AWS_ECR_PATH
+          repo: $AWS_ECR_PATH
           aws-access-key-id: AWS_ID_KEY
           aws-secret-access-key: AWS_SECRET_KEY
           region: AWS_REGION
