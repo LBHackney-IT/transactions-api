@@ -17,6 +17,7 @@ workflows:
   build_and_push_image:
     jobs:
       - aws-ecr/build_and_push_image:
+          name: build_and_push_image
           account-url: AWS_ECR_HOST
           repo: $AWS_ECR_PATH
           aws-access-key-id: AWS_ID_KEY
@@ -29,7 +30,10 @@ workflows:
       - aws-ecs/deploy-service-update:
           name: deploy-staging
           requires:
-            - aws-ecr/build_and_push_image
+            - build_and_push_image
+          aws-access-key-id: $AWS_ID_KEY
+          aws-secret-access-key: $AWS_SECRET_KEY
+          aws-region: $AWS_REGION
           family: 'transactions-api-staging'
           cluster-name: $CLUSTER_NAME
           container-image-name-updates: 'container=transactions-api-staging-service,tag=${CIRCLE_SHA1}'
