@@ -2,16 +2,25 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@3.0.0
-  aws-ecs: circleci/aws-ecs@0.0.6
+  aws-cli: circleci/aws-cli@0.1.9
 
-#jobs:
+jobs:
+  deploy-to-staging:
+    steps:
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: AWS_ID_KEY
+          aws-secret-access-key: AWS_SECRET_KEY
+          aws-region: AWS_REGION
+      - run:
+        command: |
+          ecs-deploy --region $AWS_REGION \
+          --cluster $CLUSTER_NAME \
+          --service-name transactions-api-staging \
+          --image "${AWS_ECR_HOST}/${ECR_IMAGE_URL}:${CIRCLE_SHA1}" \
+          --timeout 104400 \
+          --use-latest-task-def
 
-# CLUSTER_NAME
-# AWS_ECR_HOST
-# AWS_ECR_PATH
-# AWS_ID_KEY
-# AWS_SECRET_KEY
-# AWS_REGION
 
 workflows:
   build_and_push_image:
@@ -23,21 +32,24 @@ workflows:
           aws-access-key-id: AWS_ID_KEY
           aws-secret-access-key: AWS_SECRET_KEY
           region: AWS_REGION
-          tag: '${CIRCLE_SHA1}'
+          tag: "${CIRCLE_SHA1}"
 #          filters:
 #            branches:
 #              only: master
-      - aws-ecs/deploy-service-update:
-          name: deploy-staging
+      - deploy-to-staging:
           requires:
             - build_and_push_image
-          aws-access-key-id: $AWS_ID_KEY
-          aws-secret-access-key: $AWS_SECRET_KEY
-          aws-region: $AWS_REGION
-          family: 'transactions-api-staging'
-          cluster-name: '${CLUSTER_NAME}'
-          container-image-name-updates: 'container=transactions-api-staging-service,tag=${CIRCLE_SHA1}'
-          verify-revision-is-deployed: true
+#      - aws-ecs/deploy-service-update:
+#          name: deploy-staging
+#          requires:
+#            - build_and_push_image
+#          aws-access-key-id: $AWS_ID_KEY
+#          aws-secret-access-key: $AWS_SECRET_KEY
+#          aws-region: $AWS_REGION
+#          family: 'transactions-api-staging'
+#          cluster-name: $CLUSTER_NAME
+#          container-image-name-updates: "container=transactions-api-staging-service,tag=${CIRCLE_SHA1}"
+#          verify-revision-is-deployed: true
 #      - permit_production_release:
 #          type: approval
 #          requires:
