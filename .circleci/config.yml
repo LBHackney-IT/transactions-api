@@ -30,7 +30,7 @@ jobs:
             ecs-deploy --region $AWS_REGION \
             --cluster $CLUSTER_NAME \
             --service-name transactions-api-staging \
-            --image "${AWS_ECR_HOST}/${ECR_IMAGE_URL}:${CIRCLE_SHA1}" \
+            --image "${AWS_ECR_HOST}/${$AWS_ECR_PATH}:${CIRCLE_SHA1}" \
             --timeout 104400 \
             --use-latest-task-def
 
