@@ -33,7 +33,7 @@ jobs:
             --image "$AWS_ECR_HOST/$AWS_ECR_PATH:$CIRCLE_SHA1"
             --timeout 104400 \
             --use-latest-task-def
-
+          no_output_timeout: 30m
 
 workflows:
   build_and_deploy:
