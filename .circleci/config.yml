@@ -27,13 +27,14 @@ jobs:
       - run:
           name: Premote target image
           command: |
-            ecs-deploy --region $AWS_REGION \
+            ecs-deploy \
+            --timeout 104400 \
+            --region $AWS_REGION \
             --cluster $CLUSTER_NAME \
             --service-name transactions-api-staging \
-            --image "$AWS_ECR_HOST/$AWS_ECR_PATH:$CIRCLE_SHA1"
+            --image "$AWS_ECR_HOST/$AWS_ECR_PATH:$CIRCLE_SHA1" \
             --timeout 104400 \
-            --use-latest-task-def \
-            --skip-deployments-check
+            --use-latest-task-def
           no_output_timeout: 30m
 
 workflows:
