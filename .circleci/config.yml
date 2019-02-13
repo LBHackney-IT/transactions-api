@@ -32,7 +32,8 @@ jobs:
             --service-name transactions-api-staging \
             --image "$AWS_ECR_HOST/$AWS_ECR_PATH:$CIRCLE_SHA1"
             --timeout 104400 \
-            --use-latest-task-def
+            --use-latest-task-def \
+            --skip-deployments-check
           no_output_timeout: 30m
 
 workflows:
