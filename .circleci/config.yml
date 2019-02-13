@@ -6,6 +6,8 @@ orbs:
 
 jobs:
   deploy-to-staging:
+    docker:
+      - image: circleci/python:3.7
     steps:
       - aws-cli/install
       - aws-cli/configure:
@@ -13,18 +15,19 @@ jobs:
           aws-secret-access-key: AWS_SECRET_KEY
           aws-region: AWS_REGION
       - run:
-        command: |
-          ecs-deploy --region $AWS_REGION \
-          --cluster $CLUSTER_NAME \
-          --service-name transactions-api-staging \
-          --image "${AWS_ECR_HOST}/${ECR_IMAGE_URL}:${CIRCLE_SHA1}" \
-          --timeout 104400 \
-          --use-latest-task-def
+          name: Premote target image
+          command: |
+            ecs-deploy --region $AWS_REGION \
+            --cluster $CLUSTER_NAME \
+            --service-name transactions-api-staging \
+            --image "${AWS_ECR_HOST}/${ECR_IMAGE_URL}:${CIRCLE_SHA1}" \
+            --timeout 104400 \
+            --use-latest-task-def
 
 
 workflows:
-  build_and_push_image:
-    jobs:
+  build_and_deploy:
+      jobs:
       - aws-ecr/build_and_push_image:
           name: build_and_push_image
           account-url: AWS_ECR_HOST
