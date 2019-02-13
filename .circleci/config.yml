@@ -15,6 +15,16 @@ jobs:
           aws-secret-access-key: AWS_SECRET_KEY
           aws-region: AWS_REGION
       - run:
+          name: Install jq
+          command: |
+            apt update
+            apt install jq
+      - run:
+          name: Install ecs deploy
+          command: |
+            curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy
+            sudo chmod +x /usr/bin/ecs-deploy
+      - run:
           name: Premote target image
           command: |
             ecs-deploy --region $AWS_REGION \
