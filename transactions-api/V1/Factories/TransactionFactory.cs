@@ -8,7 +8,7 @@ namespace transactions_api.V1.Factory
         {
             return new Transaction
             {
-                Balance = transaction.Balance,
+                RunningBalance = transaction.Balance,
                 Code = transaction.Code,
                 Date = transaction.Date
             };

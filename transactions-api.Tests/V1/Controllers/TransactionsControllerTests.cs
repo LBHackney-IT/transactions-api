@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Bogus;
 using Microsoft.Extensions.Logging;
@@ -57,9 +57,14 @@ namespace UnitTests.V1.Controllers
                 { "generatedAt", datetime},
                 { "transactions", new [] { new Dictionary<string, object>
                         {
-                            {"balance", transaction.Balance},
+                            {"date", transaction.Date},
                             {"code", transaction.Code},
-                            {"date", transaction.Date}
+                            {"description", transaction.Description},
+                            {"amount", transaction.Amount },
+                            {"netValue", transaction.NetValue },
+                            {"vatValue", transaction.VatValue },
+                            {"runningBalance", transaction.RunningBalance}
+                          
                         }
                     }
                 }
@@ -81,9 +86,13 @@ namespace UnitTests.V1.Controllers
         {
             var transaction = new Transaction
             {
+                Date = new DateTime(2019, 02, 22, 09, 52, 23, 22),
                 Code = "Field",
-                Balance = 508.64m,
-                Date = new DateTime(2019, 02, 22, 09, 52, 23, 22)
+                Description = "Description",
+                Amount = 35.0m,
+                NetValue = 35.0m,
+                VatValue = 5.0m,
+                RunningBalance = 508.64m
             };
             var request = new ListTransactionsRequest
             {
@@ -112,9 +121,13 @@ namespace UnitTests.V1.Controllers
   ""generatedAt"": ""2019-02-22T09:52:23.023Z"",
   ""transactions"": [
     {
-      ""balance"": 508.64,
+      ""date"": ""2019-02-22T09:52:23.022Z"",
       ""code"": ""Field"",
-      ""date"": ""2019-02-22T09:52:23.022Z""
+      ""description"": ""Description"",
+      ""amount"": 35.0,
+      ""netValue"": 35.0,
+      ""vatValue"": 5.0,
+      ""runningBalance"": 508.64
     }
   ]
 }";

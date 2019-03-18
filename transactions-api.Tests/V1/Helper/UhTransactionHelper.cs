@@ -32,7 +32,7 @@ namespace UnitTests.V1.Helper
         {
             return new UhTransaction
             {
-                Balance = transaction.Balance,
+                Balance = transaction.RunningBalance,
                 Code = transaction.Code,
                 Date = transaction.Date
             };
