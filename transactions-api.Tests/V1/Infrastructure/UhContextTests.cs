@@ -16,9 +16,9 @@ namespace UnitTests.V1.Infrastructure
             _uhContext.Add(uhTransaction);
             _uhContext.SaveChanges();
 
-            var result = _uhContext.UTransactions.ToList().FirstOrDefault();
+            var result = _uhContext.UTransactions.ToList().Where(x => x.Date == uhTransaction.Date);
 
-            Assert.AreEqual(uhTransaction, result);
+            Assert.AreEqual(uhTransaction, result.ElementAt(0));
         }
     }
 }
