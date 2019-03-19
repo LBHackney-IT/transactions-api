@@ -24,6 +24,7 @@ namespace UnitTests.V1.Helper
             uhTransaction.none_rent = _faker.Random.Bool();
             uhTransaction.receipted = _faker.Random.Bool();
             uhTransaction.line_segno = _faker.Random.Decimal();
+            uhTransaction.vat = false;
 
             return uhTransaction;
         }
@@ -32,9 +33,11 @@ namespace UnitTests.V1.Helper
         {
             return new UhTransaction
             {
-                Balance = transaction.RunningBalance,
+                GrossAmount = transaction.GrossAmount,
                 Code = transaction.Code,
-                Date = transaction.Date
+                Date = transaction.Date,
+                NetValue = transaction.NetValue,
+                VatValue = transaction.VatValue
             };
         }
     }

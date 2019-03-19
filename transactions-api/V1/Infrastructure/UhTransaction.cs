@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace transactions_api.V1.Domain
 {
     [Table("rtrans")]
@@ -9,7 +10,9 @@ namespace transactions_api.V1.Domain
     {
         [Column("prop_ref")] public String PropRef { get; set; }
 
-        [Column("full_value")] public Decimal Balance { get; set; }
+        [Column("tag_ref")] public String TagRef { get; set; }
+
+        [Column("real_value")] public Decimal GrossAmount { get; set; }
 
         [Column("trans_type")] public string Code { get; set; }
 
@@ -35,6 +38,14 @@ namespace transactions_api.V1.Domain
 
         [Column("line_segno")] public Decimal line_segno { get; set; }
 
+        [Column("vat_value")] public Decimal? VatValue { get; set; }
+        [Column("vat")] public Boolean vat { get; set; }
+        [Column("post_value")] public Decimal NetValue { get; set; }
+//       [Computed]
+//        public String Description { get; set; }
+     
+       
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -46,7 +57,7 @@ namespace transactions_api.V1.Domain
         protected bool Equals(UhTransaction other)
         {
             return string.Equals(PropRef, other.PropRef) &&
-                   Balance == other.Balance &&
+                   GrossAmount == other.GrossAmount &&
                    string.Equals(Code, other.Code) &&
                    Date.Equals(other.Date) &&
                    Id == other.Id &&
@@ -67,7 +78,7 @@ namespace transactions_api.V1.Domain
             unchecked
             {
                 var hashCode = (PropRef != null ? PropRef.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ Balance.GetHashCode();
+                hashCode = (hashCode * 397) ^ GrossAmount.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Code != null ? Code.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Date.GetHashCode();
                 hashCode = (hashCode * 397) ^ Id;

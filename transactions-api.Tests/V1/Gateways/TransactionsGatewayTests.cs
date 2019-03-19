@@ -43,9 +43,13 @@ namespace UnitTests.V1.Gateways
             _uhContext.UTransactions.Add(dbTrans);
             _uhContext.SaveChanges();
 
-            var responce = _classUnderTest.GetTransactionsByPropertyRef(dbTrans.PropRef);
-
-            Assert.AreEqual(transaction, responce.FirstOrDefault());
+            var response = _classUnderTest.GetTransactionsByPropertyRef(dbTrans.PropRef).FirstOrDefault();
+            
+            Assert.AreEqual(transaction.GrossAmount, response.GrossAmount);
+            Assert.AreEqual(transaction.Code, response.Code);
+            Assert.AreEqual(transaction.Date.Date, response.Date.Date);
+            Assert.AreEqual(transaction.NetValue, response.NetValue);
+            Assert.AreEqual(transaction.VatValue, response.VatValue);
         }
     }
 }

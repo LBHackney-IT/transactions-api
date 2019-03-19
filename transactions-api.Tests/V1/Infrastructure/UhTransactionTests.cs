@@ -17,7 +17,7 @@ namespace UnitTests.V1.Infrastructure
             UhTransaction b = new UhTransaction
             {
                 PropRef = a.PropRef,
-                Balance = a.Balance,
+                GrossAmount = a.GrossAmount,
                 Code = a.Code,
                 Date = a.Date,
                 Id = a.Id,

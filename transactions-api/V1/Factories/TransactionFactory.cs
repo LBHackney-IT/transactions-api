@@ -8,9 +8,11 @@ namespace transactions_api.V1.Factory
         {
             return new Transaction
             {
-                RunningBalance = transaction.Balance,
+                Date = transaction.Date,
                 Code = transaction.Code,
-                Date = transaction.Date
+                GrossAmount = transaction.GrossAmount,
+                NetValue = transaction.NetValue,
+                VatValue = transaction.VatValue
             };
         }
     }

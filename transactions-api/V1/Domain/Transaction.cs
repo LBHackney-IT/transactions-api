@@ -7,9 +7,9 @@ namespace transactions_api.V1.Domain
         public DateTime Date { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
-        public Decimal Amount { get; set; }
+        public Decimal GrossAmount { get; set; }
         public Decimal NetValue { get; set; }
-        public Decimal VatValue { get; set; }
+        public Decimal? VatValue { get; set; }
         public Decimal RunningBalance { get; set; }
        
         public override bool Equals(object obj)
@@ -20,7 +20,7 @@ namespace transactions_api.V1.Domain
                 return RunningBalance == transaction.RunningBalance &&
                        string.Equals(Code, transaction.Code) &&
                        Date.Equals(transaction.Date) &&
-                       Amount == transaction.Amount &&
+                       GrossAmount == transaction.GrossAmount &&
                        VatValue == transaction.VatValue &&
                        NetValue == transaction.NetValue &&
                        string.Equals(Description,transaction.Description);
