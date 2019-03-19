@@ -45,7 +45,8 @@ namespace UnitTests.V1.Gateways
                     VatValue = rtrans.VatValue
                 }).ToList();
 
-           return result;
+       
+            return result;
 
         }
     }

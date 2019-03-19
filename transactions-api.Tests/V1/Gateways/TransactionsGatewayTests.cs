@@ -1,6 +1,7 @@
 using System.Linq;
 using Bogus;
 using NUnit.Framework;
+using transactionsapi.V1.Infrastructure;
 using transactions_api.V1.Domain;
 using UnitTests.V1.Helper;
 
@@ -40,11 +41,21 @@ namespace UnitTests.V1.Gateways
 
             UhTransaction dbTrans = UhTransactionHelper.CreateUhTransactionFrom(transaction);
 
+            UhRecType recType = new UhRecType()
+            {
+                RecDescription = _faker.Random.Hash(10),
+                rec_code = transaction.Code,
+                rec_dd = _faker.Random.Bool(),
+                rec_rb = _faker.Random.Bool(),
+                Id = _faker.Random.Int()
+            };
+
             _uhContext.UTransactions.Add(dbTrans);
+            _uhContext.RecType.Add(recType);
             _uhContext.SaveChanges();
 
             var response = _classUnderTest.GetTransactionsByPropertyRef(dbTrans.PropRef).FirstOrDefault();
-            
+
             Assert.AreEqual(transaction.GrossAmount, response.GrossAmount);
             Assert.AreEqual(transaction.Code, response.Code);
             Assert.AreEqual(transaction.Date.Date, response.Date.Date);

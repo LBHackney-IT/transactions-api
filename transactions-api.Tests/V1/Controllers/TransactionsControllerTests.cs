@@ -60,7 +60,7 @@ namespace UnitTests.V1.Controllers
                             {"date", transaction.Date},
                             {"code", transaction.Code},
                             {"description", transaction.Description},
-                            {"amount", transaction.GrossAmount },
+                            {"grossAmount", transaction.GrossAmount },
                             {"netValue", transaction.NetValue },
                             {"vatValue", transaction.VatValue },
                             {"runningBalance", transaction.RunningBalance}
@@ -124,7 +124,7 @@ namespace UnitTests.V1.Controllers
       ""date"": ""2019-02-22T09:52:23.022Z"",
       ""code"": ""Field"",
       ""description"": ""Description"",
-      ""amount"": 35.0,
+      ""grossAmount"": 35.0,
       ""netValue"": 35.0,
       ""vatValue"": 5.0,
       ""runningBalance"": 508.64
