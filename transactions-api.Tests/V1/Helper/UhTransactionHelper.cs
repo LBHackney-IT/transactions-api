@@ -24,6 +24,9 @@ namespace UnitTests.V1.Helper
             uhTransaction.none_rent = _faker.Random.Bool();
             uhTransaction.receipted = _faker.Random.Bool();
             uhTransaction.line_segno = _faker.Random.Decimal();
+            uhTransaction.tag_ref = _faker.Random.AlphaNumeric(length: 5);
+            uhTransaction.real_value = _faker.Random.Decimal();
+            uhTransaction.full_value = _faker.Random.Decimal();
 
             return uhTransaction;
         }
@@ -32,9 +35,11 @@ namespace UnitTests.V1.Helper
         {
             return new UhTransaction
             {
-                Balance = transaction.Balance,
+                tag_ref = transaction.TagRef,
                 Code = transaction.Code,
-                Date = transaction.Date
+                Date = transaction.Date,
+                real_value = transaction.NetValue,
+                full_value = transaction.GrossValue
             };
         }
     }

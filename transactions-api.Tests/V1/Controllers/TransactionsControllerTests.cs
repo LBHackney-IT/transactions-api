@@ -57,9 +57,12 @@ namespace UnitTests.V1.Controllers
                 { "generatedAt", datetime},
                 { "transactions", new [] { new Dictionary<string, object>
                         {
-                            {"balance", transaction.Balance},
                             {"code", transaction.Code},
-                            {"date", transaction.Date}
+                            {"date", transaction.Date},
+                            {"tagRef", transaction.TagRef},
+                            {"grossValue", transaction.GrossValue},
+                            {"netValue", transaction.NetValue}
+
                         }
                     }
                 }
@@ -82,8 +85,10 @@ namespace UnitTests.V1.Controllers
             var transaction = new Transaction
             {
                 Code = "Field",
-                Balance = 508.64m,
-                Date = new DateTime(2019, 02, 22, 09, 52, 23, 22)
+                Date = new DateTime(2019, 02, 22, 09, 52, 23, 22),
+                TagRef = "0012/01",
+                GrossValue = 100.00m,
+                NetValue = 120.00m
             };
             var request = new ListTransactionsRequest
             {
@@ -112,9 +117,11 @@ namespace UnitTests.V1.Controllers
   ""generatedAt"": ""2019-02-22T09:52:23.023Z"",
   ""transactions"": [
     {
-      ""balance"": 508.64,
       ""code"": ""Field"",
-      ""date"": ""2019-02-22T09:52:23.022Z""
+      ""date"": ""2019-02-22T09:52:23.022Z"",
+      ""tagRef"": ""0012/01"",
+      ""grossValue"": 100.00,
+      ""netValue"": 120.00
     }
   ]
 }";

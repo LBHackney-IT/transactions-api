@@ -17,7 +17,6 @@ namespace UnitTests.V1.Infrastructure
             UhTransaction b = new UhTransaction
             {
                 PropRef = a.PropRef,
-                Balance = a.Balance,
                 Code = a.Code,
                 Date = a.Date,
                 Id = a.Id,
@@ -29,7 +28,10 @@ namespace UnitTests.V1.Infrastructure
                 prop_deb = a.prop_deb,
                 none_rent = a.none_rent,
                 receipted = a.receipted,
-                line_segno = a.line_segno
+                line_segno = a.line_segno,
+                tag_ref = a.tag_ref,
+                real_value = a.real_value,
+                full_value = a.full_value
             };
 
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());

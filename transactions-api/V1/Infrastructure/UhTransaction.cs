@@ -9,8 +9,6 @@ namespace transactions_api.V1.Domain
     {
         [Column("prop_ref")] public String PropRef { get; set; }
 
-        [Column("full_value")] public Decimal Balance { get; set; }
-
         [Column("trans_type")] public string Code { get; set; }
 
         [Column("post_date")] public DateTime Date { get; set; }
@@ -34,6 +32,10 @@ namespace transactions_api.V1.Domain
         [Column("receipted")] public Boolean receipted { get; set; }
 
         [Column("line_segno")] public Decimal line_segno { get; set; }
+        [Column("tag_ref")] public String tag_ref { get; set; }
+        [Column("real_value")] public Decimal real_value { get; set; }
+        [Column("full_value")] public Decimal full_value { get; set; }
+
 
         public override bool Equals(object obj)
         {
@@ -46,7 +48,6 @@ namespace transactions_api.V1.Domain
         protected bool Equals(UhTransaction other)
         {
             return string.Equals(PropRef, other.PropRef) &&
-                   Balance == other.Balance &&
                    string.Equals(Code, other.Code) &&
                    Date.Equals(other.Date) &&
                    Id == other.Id &&
@@ -58,7 +59,10 @@ namespace transactions_api.V1.Domain
                    prop_deb == other.prop_deb &&
                    none_rent == other.none_rent &&
                    receipted == other.receipted &&
-                   line_segno == other.line_segno;
+                   line_segno == other.line_segno &&
+                   tag_ref == other.tag_ref &&
+                   real_value == other.real_value &&
+                   full_value == other.full_value;
         }
 
 
@@ -67,7 +71,6 @@ namespace transactions_api.V1.Domain
             unchecked
             {
                 var hashCode = (PropRef != null ? PropRef.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ Balance.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Code != null ? Code.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Date.GetHashCode();
                 hashCode = (hashCode * 397) ^ Id;
@@ -80,6 +83,10 @@ namespace transactions_api.V1.Domain
                 hashCode = (hashCode * 397) ^ none_rent.GetHashCode();
                 hashCode = (hashCode * 397) ^ receipted.GetHashCode();
                 hashCode = (hashCode * 397) ^ line_segno.GetHashCode();
+                hashCode = (hashCode * 397) ^ tag_ref.GetHashCode();
+                hashCode = (hashCode * 397) ^ real_value.GetHashCode();
+                hashCode = (hashCode * 397) ^ full_value.GetHashCode();
+
                 return hashCode;
             }
         }

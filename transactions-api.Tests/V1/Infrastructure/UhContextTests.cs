@@ -9,6 +9,14 @@ namespace UnitTests.V1.Infrastructure
     public class UhContextTest : DbTest
     {
         [Test]
+        public void TestDbIsEmpty()
+        {
+            //if this fails you are not using an empty test db
+            var result = _uhContext.UTransactions.Count();
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
         public void CanGetAUhTransaction()
         {
             UhTransaction uhTransaction = UhTransactionHelper.CreateUhTransaction();
@@ -18,6 +26,7 @@ namespace UnitTests.V1.Infrastructure
 
             var result = _uhContext.UTransactions.ToList().FirstOrDefault();
 
+            Assert.AreEqual(uhTransaction, result);
             Assert.AreEqual(uhTransaction, result);
         }
     }

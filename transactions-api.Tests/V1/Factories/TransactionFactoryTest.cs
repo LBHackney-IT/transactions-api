@@ -13,8 +13,6 @@ namespace UnitTests.V1.Factories
             var uhTransaction = new UhTransaction();
 
             var transaction = new TransactionFactory().FromUhTransaction(uhTransaction);
-
-            Assert.AreEqual(uhTransaction.Balance,transaction.Balance);
             Assert.AreEqual(uhTransaction.Code,transaction.Code);
             Assert.AreEqual(uhTransaction.Date,transaction.Date);
         }

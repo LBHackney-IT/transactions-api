@@ -11,13 +11,6 @@ namespace UnitTests.V1.Domain
     public class TransactionTests
     {
         [Test]
-        public void TransactionsHaveABalance()
-        {
-            Transaction transaction = new Transaction();
-            Assert.Zero(transaction.Balance);
-        }
-
-        [Test]
         public void TransactionsHaveACode()
         {
             Transaction transaction = new Transaction();
@@ -34,6 +27,28 @@ namespace UnitTests.V1.Domain
         }
 
         [Test]
+        public void TransactionsHaveATagRef()
+        {
+            Transaction transaction = new Transaction();
+            Assert.IsNull(transaction.TagRef);
+        }
+
+        [Test]
+        public void TransactionsHaveAGrossValue()
+        {
+            Transaction transaction = new Transaction();
+            Assert.Zero(transaction.GrossValue);
+        }
+
+
+        [Test]
+        public void TransactionsHaveANetValue()
+        {
+            Transaction transaction = new Transaction();
+            Assert.Zero(transaction.NetValue);
+        }
+
+        [Test]
         public void TransactionsCanBeCompared()
         {
             Transaction transactionA = TransactionHelper.CreateTransaction();
@@ -42,7 +57,9 @@ namespace UnitTests.V1.Domain
             {
                 Date = transactionA.Date,
                 Code = transactionA.Code,
-                Balance = transactionA.Balance
+                TagRef = transactionA.TagRef,
+                GrossValue = transactionA.GrossValue,
+                NetValue = transactionA.NetValue
             };
 
             Assert.True(transactionA.Equals(transactionB));
