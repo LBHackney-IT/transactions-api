@@ -13,6 +13,5 @@ public class UhDebType
     [Column("deb_desc")] public String DebDescription { get; set; }
     [Column("deb_code")] public String deb_code { get; set; }
     [Key, Column("debtype_sid")] public int Id { get; set; }
-
-    }
+}
 }

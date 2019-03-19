@@ -48,13 +48,13 @@ namespace UnitTests.V1.Domain
             Assert.Zero(transaction.GrossAmount);
         }
 
-//
-//        [Test]
-//        public void TransactionsHaveVATValue()
-//        {
-//            Transaction transaction = new Transaction();
-//            Assert.Zero(transaction.VatValue);
-//        }
+
+        [Test]
+        public void TransactionsHaveVATValue()
+        {
+            Transaction transaction = new Transaction();
+            Assert.Null(transaction.VatValue);
+        }
 
 
         [Test]

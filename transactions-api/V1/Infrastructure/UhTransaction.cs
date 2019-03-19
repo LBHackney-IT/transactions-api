@@ -41,9 +41,6 @@ namespace transactions_api.V1.Domain
         [Column("vat_value")] public Decimal? VatValue { get; set; }
         [Column("vat")] public Boolean vat { get; set; }
         [Column("post_value")] public Decimal NetValue { get; set; }
-//       [Computed]
-//        public String Description { get; set; }
-     
        
 
         public override bool Equals(object obj)

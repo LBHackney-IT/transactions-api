@@ -11,8 +11,7 @@ namespace UnitTests.V1.Helper
             var transaction = new Transaction
             {
                 Date = faker.Date.Past(),
-                //    Code = faker.Random.String(length: 3),
-                Code = "RDD",
+                Code = faker.Random.String(length: 3),
                 Description = faker.Random.String(15),
                 GrossAmount = faker.Finance.Amount(),
                 VatValue = faker.Finance.Amount(),

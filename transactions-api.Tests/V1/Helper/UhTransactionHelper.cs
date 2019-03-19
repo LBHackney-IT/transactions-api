@@ -24,7 +24,7 @@ namespace UnitTests.V1.Helper
             uhTransaction.none_rent = _faker.Random.Bool();
             uhTransaction.receipted = _faker.Random.Bool();
             uhTransaction.line_segno = _faker.Random.Decimal();
-            uhTransaction.vat = false;
+            uhTransaction.vat = _faker.Random.Bool();
 
             return uhTransaction;
         }
