@@ -25,16 +25,16 @@ namespace UnitTests.V1.Gateways
         }
 
         [Test]
-        public void GetTransactionsByPropertyRef_ReturnsEmptyArray()
+        public void GetTransactionsByTagRef_ReturnsEmptyArray()
         {
-            var responce = _classUnderTest.GetTransactionsByPropertyRef("random");
+            var responce = _classUnderTest.GetTransactionsByTagRef("random");
 
             Assert.AreEqual(0, responce.Count);
             Assert.AreEqual(null, responce.FirstOrDefault());
         }
 
         [Test]
-        public void GetTransactionsByPropertyRef_ReturnsCorrectResponse()
+        public void GetTransactionsByTagRef_ReturnsCorrectResponse()
         {
             Transaction transaction = TransactionHelper.CreateTransaction();
 
@@ -43,7 +43,7 @@ namespace UnitTests.V1.Gateways
             _uhContext.UTransactions.Add(dbTrans);
             _uhContext.SaveChanges();
 
-            var responce = _classUnderTest.GetTransactionsByPropertyRef(dbTrans.PropRef);
+            var responce = _classUnderTest.GetTransactionsByTagRef(dbTrans.TagRef);
 
             Assert.AreEqual(transaction, responce.FirstOrDefault());
         }

@@ -30,14 +30,14 @@ namespace UnitTests.V1.UseCase
         }
 
         [Test]
-        public void CanGetListOfTransactionsByPropertyReference()
+        public void CanGetListOfTransactionsByTagReference()
         {
-            var propertyRef = new Faker().Random.Hash();
-            var request = new ListTransactionsRequest {PropertyRef = propertyRef};
+            var tagRef = new Faker().Random.Hash();
+            var request = new ListTransactionsRequest {TagRef = tagRef };
 
             List<Transaction> response = new List<Transaction> {new Transaction()};
 
-            _transactionsGateway.Setup(foo => foo.GetTransactionsByPropertyRef(propertyRef)).Returns(response);
+            _transactionsGateway.Setup(foo => foo.GetTransactionsByTagRef(tagRef)).Returns(response);
 
             var results = _classUnderTest.Execute(request);
 
@@ -46,31 +46,31 @@ namespace UnitTests.V1.UseCase
             Assert.IsInstanceOf<Transaction>(results.Transactions.First());
 
             Assert.IsInstanceOf<ListTransactionsRequest>(results.Request);
-            Assert.AreEqual(propertyRef, results.Request.PropertyRef);
+            Assert.AreEqual(tagRef, results.Request.TagRef);
         }
 
         [Test]
         public void ExecuteCallsTransactionGateway()
         {
-            var propertyRef = new Faker().Random.Hash();
+            var tagRef = new Faker().Random.Hash();
 
-            var request = new ListTransactionsRequest {PropertyRef = propertyRef};
+            var request = new ListTransactionsRequest {TagRef = tagRef };
 
             _classUnderTest.Execute(request);
 
-            _transactionsGateway.Verify(gateway => gateway.GetTransactionsByPropertyRef(propertyRef));
+            _transactionsGateway.Verify(gateway => gateway.GetTransactionsByTagRef(tagRef));
         }
 
         [Test]
         public void ExecuteReturnsResponceUsingGatewayResults()
         {
-            var propertyRef = new Faker().Random.Hash();
+            var tagRef = new Faker().Random.Hash();
 
-            var request = new ListTransactionsRequest {PropertyRef = propertyRef};
+            var request = new ListTransactionsRequest {TagRef = tagRef };
 
             List<Transaction> response = new List<Transaction>{ new Transaction(), new Transaction()};
 
-            _transactionsGateway.Setup(foo => foo.GetTransactionsByPropertyRef(propertyRef)).Returns(response);
+            _transactionsGateway.Setup(foo => foo.GetTransactionsByTagRef(tagRef)).Returns(response);
 
 
             var result = _classUnderTest.Execute(request);

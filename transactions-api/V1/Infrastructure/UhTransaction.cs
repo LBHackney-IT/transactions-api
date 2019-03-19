@@ -8,6 +8,7 @@ namespace transactions_api.V1.Domain
     public class UhTransaction
     {
         [Column("prop_ref")] public String PropRef { get; set; }
+        [Column("tag_ref")] public String TagRef { get; set; }
 
         [Column("full_value")] public Decimal Balance { get; set; }
 
@@ -34,6 +35,8 @@ namespace transactions_api.V1.Domain
         [Column("receipted")] public Boolean receipted { get; set; }
 
         [Column("line_segno")] public Decimal line_segno { get; set; }
+
+
 
         public override bool Equals(object obj)
         {

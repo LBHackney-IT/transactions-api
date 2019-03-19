@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using transactions_api.V1.Boundary;
 
@@ -21,7 +21,7 @@ namespace transactions_api.Controllers.V1
         [HttpGet]
         public JsonResult GetTransactions([FromQuery]ListTransactionsRequest request)
         {
-            _logger.LogInformation("Transactions requested for PropertyRef: " + request.PropertyRef);
+            _logger.LogInformation("Transactions requested for TagRef: " + request.TagRef);
             var usecaseResponce = _listTransactions.Execute(request);
             return new JsonResult(usecaseResponce) {StatusCode = 200};
         }

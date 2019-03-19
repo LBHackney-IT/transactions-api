@@ -5,6 +5,6 @@ namespace UnitTests.V1.Gateways
 {
     public interface ITransactionsGateway
     {
-        List<Transaction> GetTransactionsByPropertyRef(string propertyRef);
+        List<Transaction> GetTransactionsByTagRef(string tagReference);
     }
 }

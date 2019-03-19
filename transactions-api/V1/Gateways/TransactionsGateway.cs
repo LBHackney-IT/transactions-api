@@ -18,9 +18,9 @@ namespace UnitTests.V1.Gateways
             _uhcontext = uhcontext;
         }
 
-        public List<Transaction> GetTransactionsByPropertyRef(string propertyRef)
+        public List<Transaction> GetTransactionsByTagRef(string tagRef)
         {
-            var result = _uhcontext.UTransactions.Where(t => t.PropRef == propertyRef).ToList();
+            var result = _uhcontext.UTransactions.Where(t => t.TagRef == tagRef).ToList();
             return _transactionFactory.FromUhTransaction(result);
         }
     }

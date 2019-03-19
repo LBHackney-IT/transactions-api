@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Bogus;
 using Microsoft.Extensions.Logging;
@@ -51,7 +51,7 @@ namespace UnitTests.V1.Controllers
             {
                 { "request", new Dictionary<string, object>
                     {
-                        {"propertyRef", request.PropertyRef}
+                        {"tagRef", request.TagRef}
                     }
                 },
                 { "generatedAt", datetime},
@@ -71,7 +71,7 @@ namespace UnitTests.V1.Controllers
             var faker = new Faker();
             var listTransactionsRequest = new ListTransactionsRequest
             {
-                PropertyRef = faker.Random.Hash()
+                TagRef = faker.Random.Hash()
             };
             return listTransactionsRequest;
         }
@@ -87,7 +87,7 @@ namespace UnitTests.V1.Controllers
             };
             var request = new ListTransactionsRequest
             {
-                PropertyRef = "testString"
+                TagRef = "testString"
             };
 
             var generatedAt = new DateTime(2019, 02, 22, 09, 52, 23, 23);
@@ -107,7 +107,7 @@ namespace UnitTests.V1.Controllers
             string json =
 @"{
   ""request"": {
-    ""propertyRef"": ""testString""
+    ""tagRef"": ""testString""
   },
   ""generatedAt"": ""2019-02-22T09:52:23.023Z"",
   ""transactions"": [

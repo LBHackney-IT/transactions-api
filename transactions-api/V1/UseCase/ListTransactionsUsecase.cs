@@ -15,7 +15,7 @@ namespace transactions_api.UseCase.V1
 
         public ListTransactionsResponse Execute(ListTransactionsRequest listTransactionsRequest)
         {
-            var results = _transactionsGateway.GetTransactionsByPropertyRef(listTransactionsRequest.PropertyRef);
+            var results = _transactionsGateway.GetTransactionsByTagRef(listTransactionsRequest.TagRef);
 
            return new ListTransactionsResponse(results, listTransactionsRequest, DateTime.Now);
         }
