@@ -16,7 +16,6 @@ using transactions_api.V1.Boundary;
 using UnitTests.V1.Gateways;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-
 using transactions_api.Versioning;
 using UnitTests.V1.Infrastructure;
 
@@ -31,7 +30,6 @@ namespace transactions_api
 
         public IConfiguration Configuration { get; }
         private static List<ApiVersionDescription> _apiVersions { get; set; }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -120,8 +118,6 @@ namespace transactions_api
             services.AddSingleton<IListTransactions, ListTransactionsUsecase>();
         }
 
-
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -134,7 +130,6 @@ namespace transactions_api
                 app.UseHsts();
             }
             //Get All ApiVersions,
-
             var api = app.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
             //Get All ApiVersions,
             _apiVersions = api.ApiVersionDescriptions.Select(s => s).ToList();
@@ -150,7 +145,6 @@ namespace transactions_api
             });
 
             app.UseSwagger();
-         
 
             app.UseMvc(routes =>
             {
@@ -158,6 +152,5 @@ namespace transactions_api
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
-       
     }
 }

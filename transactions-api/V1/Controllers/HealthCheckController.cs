@@ -7,9 +7,7 @@ namespace transactions_api.Controllers.V1
     [ApiVersion("1")]
     [Route("api/v1/healthcheck")]
     [ApiController]
-
     [Produces("application/json")]
-
     public class HealthCheckController : BaseController
     {
         [HttpGet]
