@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using transactions_api.UseCase.V1;
 
 namespace transactions_api.Controllers.V1
 {
+    [ApiVersion("1")]
     [Route("api/v1/healthcheck")]
     [ApiController]
+
     [Produces("application/json")]
+
     public class HealthCheckController : BaseController
     {
         [HttpGet]

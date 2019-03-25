@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using transactions_api.V1.Boundary;
 
 namespace transactions_api.Controllers.V1
 {
+    [ApiVersion("1")]
     [Route("api/v1/transactions")]
     [ApiController]
     [Produces("application/json")]
