@@ -144,7 +144,7 @@ namespace transactions_api
                 foreach (var apiVersionDescription in _apiVersions)
                 {
                     //Create a swagger endpoint for each swagger version
-                    c.SwaggerEndpoint($"v1/swagger.json",
+                    c.SwaggerEndpoint($"{apiVersionDescription.GetFormattedApiVersion()}/swagger.json",
                         $"transactions-api {apiVersionDescription.GetFormattedApiVersion()}");
                 }
             });
