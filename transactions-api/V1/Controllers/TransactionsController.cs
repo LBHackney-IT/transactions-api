@@ -19,6 +19,7 @@ namespace transactions_api.Controllers.V1
             _logger = logger;
         }
 
+        [ProducesResponseType(typeof(ListTransactionsResponse), 200)]
         [HttpGet]
         public JsonResult GetTransactions([FromQuery]ListTransactionsRequest request)
         {
