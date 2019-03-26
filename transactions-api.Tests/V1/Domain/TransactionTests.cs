@@ -45,7 +45,7 @@ namespace UnitTests.V1.Domain
         public void TransactionsHaveAmount()
         {
             Transaction transaction = new Transaction();
-            Assert.Zero(transaction.GrossAmount);
+            Assert.Zero(transaction.Amount);
         }
 
 
@@ -74,7 +74,7 @@ namespace UnitTests.V1.Domain
                 Date = transactionA.Date,
                 Code = transactionA.Code,
                 Description = transactionA.Description,
-                GrossAmount = transactionA.GrossAmount,
+                Amount = transactionA.Amount,
                 VatValue = transactionA.VatValue,
                 NetValue = transactionA.NetValue,
                 RunningBalance = transactionA.RunningBalance

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace transactionsapi.V1.Infrastructure
+namespace transactions_api.V1.Infrastructure
 {
     [Table("rectype")]
     public class UhRecType

@@ -5,11 +5,17 @@ namespace transactions_api.V1.Domain
     public class Transaction
     {
         public DateTime Date { get; set; }
+        public DateTime FinancialYear { get; set; }
+        public Decimal PeriodNumber { get; set; }
+        public int BatchId { get; set; }
+        public string BatchCreatedBy { get; set; }
+        public string BatchCreatedOn { get; set; }
+        public DateTime BatchPostedOn { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
-        public Decimal GrossAmount { get; set; }
-        public Decimal NetValue { get; set; }
-        public Decimal? VatValue { get; set; }
+        public string Comments { get; set; }
+
+        public Decimal Amount { get; set; }
         public Decimal RunningBalance { get; set; }
        
         public override bool Equals(object obj)
@@ -20,9 +26,7 @@ namespace transactions_api.V1.Domain
                 return RunningBalance == transaction.RunningBalance &&
                        string.Equals(Code, transaction.Code) &&
                        Date.Equals(transaction.Date) &&
-                       GrossAmount == transaction.GrossAmount &&
-                       VatValue == transaction.VatValue &&
-                       NetValue == transaction.NetValue &&
+                       Amount == transaction.Amount &&
                        string.Equals(Description,transaction.Description);
             }
             return false;

@@ -39,7 +39,7 @@ namespace UnitTests.V1.Gateways
                               Description = rtrans.Code.StartsWith("D", StringComparison.CurrentCultureIgnoreCase)
                                   ? debcode.DebDescription
                                   : reccode.RecDescription,
-                              GrossAmount = rtrans.GrossAmount,
+                              Amount = rtrans.Amount,
                               NetValue = rtrans.NetValue,
                               VatValue = rtrans.VatValue
                           }).ToList();

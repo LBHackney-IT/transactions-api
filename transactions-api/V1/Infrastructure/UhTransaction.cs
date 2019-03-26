@@ -12,7 +12,7 @@ namespace transactions_api.V1.Domain
 
         [Column("tag_ref")] public String TagRef { get; set; }
 
-        [Column("real_value")] public Decimal GrossAmount { get; set; }
+        [Column("real_value")] public Decimal Amount { get; set; }
 
         [Column("trans_type")] public string Code { get; set; }
 
@@ -38,9 +38,6 @@ namespace transactions_api.V1.Domain
 
         [Column("line_segno")] public Decimal line_segno { get; set; }
 
-        [Column("vat_value")] public Decimal? VatValue { get; set; }
-        [Column("vat")] public Boolean vat { get; set; }
-        [Column("post_value")] public Decimal NetValue { get; set; }
        
         public override bool Equals(object obj)
         {
@@ -53,7 +50,7 @@ namespace transactions_api.V1.Domain
         protected bool Equals(UhTransaction other)
         {
             return string.Equals(PropRef, other.PropRef) &&
-                   GrossAmount == other.GrossAmount &&
+                   Amount == other.Amount &&
                    string.Equals(Code, other.Code) &&
                    Date.Equals(other.Date) &&
                    Id == other.Id &&
@@ -74,7 +71,7 @@ namespace transactions_api.V1.Domain
             unchecked
             {
                 var hashCode = (PropRef != null ? PropRef.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ GrossAmount.GetHashCode();
+                hashCode = (hashCode * 397) ^ Amount.GetHashCode();
                 hashCode = (hashCode * 397) ^ (Code != null ? Code.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Date.GetHashCode();
                 hashCode = (hashCode * 397) ^ Id;

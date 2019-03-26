@@ -13,7 +13,7 @@ namespace UnitTests.V1.Helper
                 Date = faker.Date.Past(),
                 Code = faker.Random.Hash(3),
                 Description = faker.Random.Hash(15),
-                GrossAmount = faker.Finance.Amount(),
+                Amount = faker.Finance.Amount(),
                 VatValue = faker.Finance.Amount(),
                 NetValue = faker.Finance.Amount(),
                 RunningBalance = faker.Finance.Amount()

@@ -60,7 +60,7 @@ namespace UnitTests.V1.Controllers
                             {"date", transaction.Date},
                             {"code", transaction.Code},
                             {"description", transaction.Description},
-                            {"grossAmount", transaction.GrossAmount },
+                            {"grossAmount", transaction.Amount },
                             {"netValue", transaction.NetValue },
                             {"vatValue", transaction.VatValue },
                             {"runningBalance", transaction.RunningBalance}
@@ -89,7 +89,7 @@ namespace UnitTests.V1.Controllers
                 Date = new DateTime(2019, 02, 22, 09, 52, 23, 22),
                 Code = "Field",
                 Description = "Description",
-                GrossAmount = 35.0m,
+                Amount = 35.0m,
                 NetValue = 35.0m,
                 VatValue = 5.0m,
                 RunningBalance = 508.64m

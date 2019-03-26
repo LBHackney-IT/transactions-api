@@ -14,7 +14,7 @@ namespace UnitTests.V1.Factories
 
             var transaction = new TransactionFactory().FromUhTransaction(uhTransaction);
 
-            Assert.AreEqual(uhTransaction.GrossAmount,transaction.GrossAmount);
+            Assert.AreEqual(uhTransaction.Amount,transaction.Amount);
             Assert.AreEqual(uhTransaction.Code,transaction.Code);
             Assert.AreEqual(uhTransaction.Date,transaction.Date);
             Assert.AreEqual(uhTransaction.NetValue, transaction.NetValue);

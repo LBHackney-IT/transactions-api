@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using transactionsapi.V1.Infrastructure;
 using transactions_api.V1.Domain;
+using transactions_api.V1.Infrastructure;
 
 namespace UnitTests.V1.Infrastructure
 {

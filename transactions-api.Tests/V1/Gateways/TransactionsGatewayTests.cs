@@ -1,7 +1,7 @@
 using System.Linq;
 using Bogus;
 using NUnit.Framework;
-using transactionsapi.V1.Infrastructure;
+using transactions_api.V1.Infrastructure;
 using transactions_api.V1.Domain;
 using UnitTests.V1.Helper;
 
@@ -56,7 +56,7 @@ namespace UnitTests.V1.Gateways
 
             var response = _classUnderTest.GetTransactionsByPropertyRef(dbTrans.PropRef).FirstOrDefault();
 
-            Assert.AreEqual(transaction.GrossAmount, response.GrossAmount);
+            Assert.AreEqual(transaction.Amount, response.Amount);
             Assert.AreEqual(transaction.Code, response.Code);
             Assert.AreEqual(transaction.Date.Date, response.Date.Date);
             Assert.AreEqual(transaction.NetValue, response.NetValue);

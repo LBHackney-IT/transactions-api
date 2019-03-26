@@ -33,7 +33,7 @@ namespace UnitTests.V1.Helper
         {
             return new UhTransaction
             {
-                GrossAmount = transaction.GrossAmount,
+                Amount = transaction.Amount,
                 Code = transaction.Code,
                 Date = transaction.Date,
                 NetValue = transaction.NetValue,
