@@ -79,9 +79,7 @@ namespace transactions_api
                     {
                         Title = $"transactions-api {version}",
                         Version = version,
-                        Description = "Only superseded methods are included in newer api versions. " +
-                                      "Please check older versions for more paths and newer versions " +
-                                      "if a method has been marked deprecated",
+                        Description = $"Transactions API version {version}. Please check older versions for depreceted endpoints."
                     });
                 }
 
