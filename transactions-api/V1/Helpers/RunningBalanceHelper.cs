@@ -7,9 +7,9 @@ using transactions_api.V1.Domain;
 
 namespace transactions_api.V1.Helpers
 {
-    public class RunningBalanceHelper
+    public static class RunningBalanceHelper
     {
-        public static List<Transaction> CalculateRunningBalance(List<Transaction> listOfTransactions)
+        public static List<Transaction> CalculateRunningBalance(this List<Transaction> listOfTransactions)
         {
             //running balance starts from 0
             decimal runningBalance = 0;
@@ -18,7 +18,6 @@ namespace transactions_api.V1.Helpers
                 runningBalance = transaction.Amount + runningBalance;
                 transaction.RunningBalance = runningBalance;
             }
-
             return listOfTransactions;
         }
     }
