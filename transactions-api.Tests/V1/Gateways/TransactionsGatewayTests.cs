@@ -47,7 +47,7 @@ namespace UnitTests.V1.Gateways
                 RecDescription = _faker.Random.Hash(10),
                 rec_code = transaction.Code,
                 rec_dd = _faker.Random.Bool(),
-                rec_rb = _faker.Random.Bool(),
+                rec_hb = _faker.Random.Bool(),
                 Id = _faker.Random.Int()
             };
 
@@ -59,7 +59,7 @@ namespace UnitTests.V1.Gateways
 
             Assert.AreEqual(transaction.Amount, response.Amount);
             Assert.AreEqual(transaction.Code, response.Code);
-            Assert.AreEqual(transaction.Date.Date, response.Date.Date);
+            Assert.That(transaction.Date, Is.EqualTo(response.Date).Within(1).Hours);
             Assert.AreEqual(transaction.Comments,response.Comments);
             Assert.AreEqual(transaction.PeriodNumber,response.PeriodNumber);
             Assert.AreEqual(transaction.FinancialYear,response.FinancialYear);
