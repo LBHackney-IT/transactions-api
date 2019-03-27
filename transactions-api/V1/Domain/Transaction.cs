@@ -10,7 +10,6 @@ namespace transactions_api.V1.Domain
         public string Code { get; set; }
         public string Description { get; set; }
         public string Comments { get; set; }
-
         public Decimal Amount { get; set; }
         public Decimal RunningBalance { get; set; }
 

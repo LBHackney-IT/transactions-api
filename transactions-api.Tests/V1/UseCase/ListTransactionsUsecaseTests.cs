@@ -6,7 +6,6 @@ using transactions_api.UseCase.V1;
 using transactions_api.V1.Boundary;
 using transactions_api.V1.Domain;
 using Moq;
-using transactions_api.V1.Helpers;
 using UnitTests.V1.Gateways;
 
 namespace UnitTests.V1.UseCase

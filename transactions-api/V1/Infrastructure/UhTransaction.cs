@@ -9,31 +9,18 @@ namespace transactions_api.V1.Domain
     public class UhTransaction
     {
         [Column("prop_ref")] public String PropRef { get; set; }
-
         [Column("tag_ref")] public String TagRef { get; set; }
-
         [Column("real_value")] public Decimal Amount { get; set; }
-
         [Column("trans_type")] public string Code { get; set; }
-
         [Column("post_date")] public DateTime Date { get; set; }
-
         [Key, Column("rtrans_sid")] public int Id { get; set; }
-
         [Column("batchno")] public Decimal batchno { get; set; }
-
         [Column("transno")] public int transno { get; set; }
-
         [Column("line_no")] public int line_no { get; set; }
-
         [Column("adjustment")] public Boolean adjustment { get; set; }
-
         [Column("apportion")] public Boolean apportion { get; set; }
-
         [Column("prop_deb")] public Boolean prop_deb { get; set; }
-
         [Column("none_rent")] public Boolean none_rent { get; set; }
-
         [Column("receipted")] public Boolean receipted { get; set; }
         [Column("line_segno")] public Decimal line_segno { get; set; }
         [Column("post_year")] public int FinancialYear { get; set; }
