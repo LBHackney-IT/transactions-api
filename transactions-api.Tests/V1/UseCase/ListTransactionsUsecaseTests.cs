@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using NUnit.Framework;
-using transactions_api.UseCase.V1;
+using transactions_api.UseCase;
 using transactions_api.V1.Boundary;
 using transactions_api.V1.Domain;
 using Moq;
+using transactions_api.V1.Helpers;
 using UnitTests.V1.Gateways;
+using UnitTests.V1.Helper;
 
 namespace UnitTests.V1.UseCase
 {
@@ -15,12 +17,14 @@ namespace UnitTests.V1.UseCase
     {
         private ListTransactionsUsecase _classUnderTest;
         private Mock<ITransactionsGateway> _transactionsGateway;
+        private Faker _faker;
 
         [SetUp]
         public void Setup()
         {
             _transactionsGateway = new Mock<ITransactionsGateway>();
             _classUnderTest = new ListTransactionsUsecase(_transactionsGateway.Object);
+            _faker = new Faker();
         }
 
         [Test]
@@ -32,7 +36,7 @@ namespace UnitTests.V1.UseCase
         [Test]
         public void CanGetListOfTransactionsByPropertyReference()
         {
-            var propertyRef = new Faker().Random.Hash();
+            var propertyRef = _faker.Random.Hash();
             var request = new ListTransactionsRequest {PropertyRef = propertyRef};
 
             List<Transaction> response = new List<Transaction> {new Transaction()};
@@ -52,7 +56,7 @@ namespace UnitTests.V1.UseCase
         [Test]
         public void ExecuteCallsTransactionGateway()
         {
-            var propertyRef = new Faker().Random.Hash();
+            var propertyRef = _faker.Random.Hash();
 
             var request = new ListTransactionsRequest {PropertyRef = propertyRef};
 
@@ -64,7 +68,7 @@ namespace UnitTests.V1.UseCase
         [Test]
         public void ExecuteReturnsResponceUsingGatewayResults()
         {
-            var propertyRef = new Faker().Random.Hash();
+            var propertyRef = _faker.Random.Hash();
 
             var request = new ListTransactionsRequest {PropertyRef = propertyRef};
 
@@ -77,5 +81,41 @@ namespace UnitTests.V1.UseCase
             Assert.AreEqual(response, result.Transactions);
 
         }
+
+        [TestCase("abc")]
+        [TestCase("bcd")]
+        [TestCase("asdasdas")]
+        public void ExecuteReturnsOBjectWithRunningBalancePopulated(string propRef)
+        {
+            var propertyRef = propRef;
+            var request = new ListTransactionsRequest(){PropertyRef = propertyRef};
+
+            Transaction transactionA = TransactionHelper.CreateTransaction();
+            Transaction transactionB = TransactionHelper.CreateTransaction();
+
+            List<Transaction> listOfTransactions = new List<Transaction>() { transactionA, transactionB };
+
+            _transactionsGateway.Setup(x => x.GetTransactionsByPropertyRef(propertyRef)).Returns(listOfTransactions);
+
+            listOfTransactions = listOfTransactions?.CalculateRunningBalance();
+
+            var expectedResult = _classUnderTest.Execute(request);
+
+            Assert.AreEqual(expectedResult.Transactions,listOfTransactions);
+        }
+
+        [Test]
+        public void ExecuteReturnsOBjectWithRunningBalanceUnPopulated()
+        {
+            var propertyRef = _faker.Random.Hash(9);
+            var request = new ListTransactionsRequest() { PropertyRef = propertyRef };
+
+            _transactionsGateway.Setup(x => x.GetTransactionsByPropertyRef(propertyRef)).Returns(()=>null);
+
+            var expectedResult = _classUnderTest.Execute(request);
+
+            Assert.IsNull(expectedResult.Transactions);
+        }
+
     }
 }

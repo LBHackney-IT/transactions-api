@@ -1,8 +1,9 @@
 using System;
 using transactions_api.V1.Boundary;
+using transactions_api.V1.Helpers;
 using UnitTests.V1.Gateways;
 
-namespace transactions_api.UseCase.V1
+namespace transactions_api.UseCase
 {
     public class ListTransactionsUsecase : IListTransactions
     {
@@ -15,9 +16,11 @@ namespace transactions_api.UseCase.V1
 
         public ListTransactionsResponse Execute(ListTransactionsRequest listTransactionsRequest)
         {
-           var results = _transactionsGateway.GetTransactionsByPropertyRef(listTransactionsRequest.PropertyRef);
-          
-           return new ListTransactionsResponse(results, listTransactionsRequest, DateTime.Now);
+            var results = _transactionsGateway.GetTransactionsByPropertyRef(listTransactionsRequest.PropertyRef);
+
+            results = results?.CalculateRunningBalance();
+
+            return new ListTransactionsResponse(results, listTransactionsRequest, DateTime.Now);
         }
     }
 }
