@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Bogus;
 using Microsoft.Extensions.Logging;
@@ -57,9 +57,14 @@ namespace UnitTests.V1.Controllers
                 { "generatedAt", datetime},
                 { "transactions", new [] { new Dictionary<string, object>
                         {
-                            {"balance", transaction.Balance},
+                            {"date", transaction.Date},
+                            {"financialYear", transaction.FinancialYear },
+                            {"periodNumber", transaction.PeriodNumber },
                             {"code", transaction.Code},
-                            {"date", transaction.Date}
+                            {"description", transaction.Description},
+                            {"comments", transaction.Comments},
+                            {"amount", transaction.Amount },
+                            {"runningBalance", transaction.RunningBalance}
                         }
                     }
                 }
@@ -81,9 +86,14 @@ namespace UnitTests.V1.Controllers
         {
             var transaction = new Transaction
             {
+                Date = new DateTime(2019, 02, 22, 09, 52, 23, 22),
                 Code = "Field",
-                Balance = 508.64m,
-                Date = new DateTime(2019, 02, 22, 09, 52, 23, 22)
+                Description = "Description",
+                Amount = 35.0m,
+                Comments = "Comments",
+                FinancialYear = 2017,
+                PeriodNumber = 3,
+                RunningBalance = 508.64m
             };
             var request = new ListTransactionsRequest
             {
@@ -112,9 +122,14 @@ namespace UnitTests.V1.Controllers
   ""generatedAt"": ""2019-02-22T09:52:23.023Z"",
   ""transactions"": [
     {
-      ""balance"": 508.64,
+      ""date"": ""2019-02-22T09:52:23.022Z"",
+      ""financialYear"": 2017,
+      ""periodNumber"": 3.0,
       ""code"": ""Field"",
-      ""date"": ""2019-02-22T09:52:23.022Z""
+      ""description"": ""Description"",
+      ""comments"": ""Comments"",
+      ""amount"": 35.0,
+      ""runningBalance"": 508.64
     }
   ]
 }";

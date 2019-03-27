@@ -11,8 +11,13 @@ namespace UnitTests.V1.Helper
             var transaction = new Transaction
             {
                 Date = faker.Date.Past(),
-                Code = faker.Random.String(length: 3),
-                Balance = faker.Finance.Amount(),
+                Code = faker.Random.Hash(3),
+                Description = faker.Random.Hash(15),
+                Amount = faker.Finance.Amount(),
+                Comments = faker.Random.Hash(15),
+                FinancialYear = faker.Date.Past().Year,
+                PeriodNumber = faker.Random.Int(0,99),
+                RunningBalance = faker.Finance.Amount()
             };
             return transaction;
         }

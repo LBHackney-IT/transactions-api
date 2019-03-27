@@ -14,9 +14,12 @@ namespace UnitTests.V1.Factories
 
             var transaction = new TransactionFactory().FromUhTransaction(uhTransaction);
 
-            Assert.AreEqual(uhTransaction.Balance,transaction.Balance);
+            Assert.AreEqual(uhTransaction.Amount,transaction.Amount);
             Assert.AreEqual(uhTransaction.Code,transaction.Code);
             Assert.AreEqual(uhTransaction.Date,transaction.Date);
+            Assert.AreEqual(uhTransaction.PeriodNumber,transaction.PeriodNumber);
+            Assert.AreEqual(uhTransaction.FinancialYear,transaction.FinancialYear);
+            Assert.AreEqual(uhTransaction.Comments,transaction.Comments);
         }
     }
 }
