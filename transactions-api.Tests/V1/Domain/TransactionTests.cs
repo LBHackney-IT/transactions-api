@@ -32,7 +32,12 @@ namespace UnitTests.V1.Domain
             transaction.Date = date;
             Assert.AreEqual(date, transaction.Date);
         }
-
+        [Test]
+        public void TransactionsHaveComments()
+        {
+            Transaction transaction = new Transaction();
+            Assert.IsNull(transaction.Comments);
+        }
 
         [Test]
         public void TransactionsHaveADescription()
@@ -48,20 +53,20 @@ namespace UnitTests.V1.Domain
             Assert.Zero(transaction.Amount);
         }
 
-
         [Test]
-        public void TransactionsHaveVATValue()
+        public void TransactionsHaveFinancialYearYear()
         {
             Transaction transaction = new Transaction();
-            Assert.Null(transaction.VatValue);
+            int year = new DateTime(2019, 02, 21).Year;
+            transaction.FinancialYear = year;
+            Assert.AreEqual(year, transaction.FinancialYear);
         }
 
-
         [Test]
-        public void TransactionsHaveNetValue()
+        public void TransactionsHavePeriodNumber()
         {
             Transaction transaction = new Transaction();
-            Assert.Zero(transaction.NetValue);
+            Assert.Zero(transaction.PeriodNumber);
         }
 
         [Test]
@@ -75,14 +80,18 @@ namespace UnitTests.V1.Domain
                 Code = transactionA.Code,
                 Description = transactionA.Description,
                 Amount = transactionA.Amount,
-                VatValue = transactionA.VatValue,
-                NetValue = transactionA.NetValue,
+                Comments = transactionA.Comments,
+                PeriodNumber = transactionA.PeriodNumber,
+                FinancialYear = transactionA.FinancialYear,
                 RunningBalance = transactionA.RunningBalance
             };
 
             Assert.True(transactionA.Equals(transactionB));
             Assert.AreEqual(transactionA.GetHashCode(),transactionB.GetHashCode());
-
+            Assert.AreEqual(transactionA.Comments, transactionB.Comments);
+            Assert.AreEqual(transactionA.FinancialYear,transactionB.FinancialYear);
+            Assert.AreEqual(transactionA.PeriodNumber,transactionB.PeriodNumber);
+            Assert.AreEqual(transactionA.Date,transactionB.Date);
             Assert.AreNotSame(transactionA, transactionB);
             Assert.AreEqual(transactionA, transactionB);
         }

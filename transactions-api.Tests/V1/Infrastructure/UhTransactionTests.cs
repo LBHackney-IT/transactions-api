@@ -20,6 +20,9 @@ namespace UnitTests.V1.Infrastructure
                 Amount = a.Amount,
                 Code = a.Code,
                 Date = a.Date,
+                FinancialYear = a.FinancialYear,
+                PeriodNumber = a.PeriodNumber,
+                Comments = a.Comments,
                 Id = a.Id,
                 batchno = a.batchno,
                 transno = a.transno,
@@ -28,8 +31,7 @@ namespace UnitTests.V1.Infrastructure
                 apportion = a.apportion,
                 prop_deb = a.prop_deb,
                 none_rent = a.none_rent,
-                receipted = a.receipted,
-                line_segno = a.line_segno
+                receipted = a.receipted
             };
 
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());

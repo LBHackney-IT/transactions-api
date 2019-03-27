@@ -23,9 +23,7 @@ namespace UnitTests.V1.Helper
             uhTransaction.prop_deb = _faker.Random.Bool();
             uhTransaction.none_rent = _faker.Random.Bool();
             uhTransaction.receipted = _faker.Random.Bool();
-            uhTransaction.line_segno = _faker.Random.Decimal();
-            uhTransaction.vat = _faker.Random.Bool();
-
+          
             return uhTransaction;
         }
 
@@ -36,8 +34,9 @@ namespace UnitTests.V1.Helper
                 Amount = transaction.Amount,
                 Code = transaction.Code,
                 Date = transaction.Date,
-                NetValue = transaction.NetValue,
-                VatValue = transaction.VatValue
+                Comments = transaction.Comments,
+                FinancialYear = transaction.FinancialYear,
+                PeriodNumber = transaction.PeriodNumber,
             };
         }
     }

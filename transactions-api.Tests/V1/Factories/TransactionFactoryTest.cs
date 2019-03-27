@@ -17,8 +17,9 @@ namespace UnitTests.V1.Factories
             Assert.AreEqual(uhTransaction.Amount,transaction.Amount);
             Assert.AreEqual(uhTransaction.Code,transaction.Code);
             Assert.AreEqual(uhTransaction.Date,transaction.Date);
-            Assert.AreEqual(uhTransaction.NetValue, transaction.NetValue);
-            Assert.AreEqual(uhTransaction.VatValue, transaction.VatValue);
+            Assert.AreEqual(uhTransaction.PeriodNumber,transaction.PeriodNumber);
+            Assert.AreEqual(uhTransaction.FinancialYear,transaction.FinancialYear);
+            Assert.AreEqual(uhTransaction.Comments,transaction.Comments);
         }
     }
 }

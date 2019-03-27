@@ -35,6 +35,7 @@ namespace UnitTests.V1.Gateways
         }
 
         [Test]
+      
         public void GetTransactionsByPropertyRef_ReturnsCorrectResponse()
         {
             Transaction transaction = TransactionHelper.CreateTransaction();
@@ -59,8 +60,9 @@ namespace UnitTests.V1.Gateways
             Assert.AreEqual(transaction.Amount, response.Amount);
             Assert.AreEqual(transaction.Code, response.Code);
             Assert.AreEqual(transaction.Date.Date, response.Date.Date);
-            Assert.AreEqual(transaction.NetValue, response.NetValue);
-            Assert.AreEqual(transaction.VatValue, response.VatValue);
+            Assert.AreEqual(transaction.Comments,response.Comments);
+            Assert.AreEqual(transaction.PeriodNumber,response.PeriodNumber);
+            Assert.AreEqual(transaction.FinancialYear,response.FinancialYear);
         }
     }
 }

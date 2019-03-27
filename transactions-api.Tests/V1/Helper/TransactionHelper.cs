@@ -14,8 +14,9 @@ namespace UnitTests.V1.Helper
                 Code = faker.Random.Hash(3),
                 Description = faker.Random.Hash(15),
                 Amount = faker.Finance.Amount(),
-                VatValue = faker.Finance.Amount(),
-                NetValue = faker.Finance.Amount(),
+                Comments = faker.Random.Hash(15),
+                FinancialYear = faker.Date.Past().Year,
+                PeriodNumber = faker.Random.Int(0,99),
                 RunningBalance = faker.Finance.Amount()
             };
             return transaction;

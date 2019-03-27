@@ -32,6 +32,7 @@ namespace UnitTests.V1.Gateways
                               on rtrans.Code equals rectype.rec_code into rc
                           from reccode in rc.DefaultIfEmpty()
                           where rtrans.PropRef == propertyRef
+                          orderby rtrans.Date ascending
                           select new Transaction()
                           {
                               Date = rtrans.Date,
@@ -40,8 +41,9 @@ namespace UnitTests.V1.Gateways
                                   ? debcode.DebDescription
                                   : reccode.RecDescription,
                               Amount = rtrans.Amount,
-                              NetValue = rtrans.NetValue,
-                              VatValue = rtrans.VatValue
+                              Comments = rtrans.Comments,
+                              FinancialYear = rtrans.FinancialYear,
+                              PeriodNumber = rtrans.PeriodNumber
                           }).ToList();
 
             return result;

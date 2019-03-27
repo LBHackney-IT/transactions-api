@@ -58,13 +58,13 @@ namespace UnitTests.V1.Controllers
                 { "transactions", new [] { new Dictionary<string, object>
                         {
                             {"date", transaction.Date},
+                            {"financialYear", transaction.FinancialYear },
+                            {"periodNumber", transaction.PeriodNumber },
                             {"code", transaction.Code},
                             {"description", transaction.Description},
-                            {"grossAmount", transaction.Amount },
-                            {"netValue", transaction.NetValue },
-                            {"vatValue", transaction.VatValue },
+                            {"comments", transaction.Comments},
+                            {"amount", transaction.Amount },
                             {"runningBalance", transaction.RunningBalance}
-                          
                         }
                     }
                 }
@@ -90,8 +90,9 @@ namespace UnitTests.V1.Controllers
                 Code = "Field",
                 Description = "Description",
                 Amount = 35.0m,
-                NetValue = 35.0m,
-                VatValue = 5.0m,
+                Comments = "Comments",
+                FinancialYear = 2017,
+                PeriodNumber = 3,
                 RunningBalance = 508.64m
             };
             var request = new ListTransactionsRequest
@@ -122,11 +123,12 @@ namespace UnitTests.V1.Controllers
   ""transactions"": [
     {
       ""date"": ""2019-02-22T09:52:23.022Z"",
+      ""financialYear"": 2017,
+      ""periodNumber"": 3.0,
       ""code"": ""Field"",
       ""description"": ""Description"",
-      ""grossAmount"": 35.0,
-      ""netValue"": 35.0,
-      ""vatValue"": 5.0,
+      ""comments"": ""Comments"",
+      ""amount"": 35.0,
       ""runningBalance"": 508.64
     }
   ]

@@ -6,6 +6,7 @@ using transactions_api.UseCase.V1;
 using transactions_api.V1.Boundary;
 using transactions_api.V1.Domain;
 using Moq;
+using transactions_api.V1.Helpers;
 using UnitTests.V1.Gateways;
 
 namespace UnitTests.V1.UseCase
@@ -71,7 +72,6 @@ namespace UnitTests.V1.UseCase
             List<Transaction> response = new List<Transaction>{ new Transaction(), new Transaction()};
 
             _transactionsGateway.Setup(foo => foo.GetTransactionsByPropertyRef(propertyRef)).Returns(response);
-
 
             var result = _classUnderTest.Execute(request);
 

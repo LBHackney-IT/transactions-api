@@ -35,10 +35,11 @@ namespace transactions_api.V1.Domain
         [Column("none_rent")] public Boolean none_rent { get; set; }
 
         [Column("receipted")] public Boolean receipted { get; set; }
-
         [Column("line_segno")] public Decimal line_segno { get; set; }
+        [Column("post_year")] public int FinancialYear { get; set; }
+        [Column("post_prdno")] public Decimal PeriodNumber { get; set; }
+        [Column("post_comm")] public string Comments { get; set; }
 
-       
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -62,7 +63,10 @@ namespace transactions_api.V1.Domain
                    prop_deb == other.prop_deb &&
                    none_rent == other.none_rent &&
                    receipted == other.receipted &&
-                   line_segno == other.line_segno;
+                   line_segno == other.line_segno &&
+                   FinancialYear == other.FinancialYear &&
+                   PeriodNumber == other.PeriodNumber &&
+                   Comments == other.Comments;
         }
 
 
@@ -84,6 +88,9 @@ namespace transactions_api.V1.Domain
                 hashCode = (hashCode * 397) ^ none_rent.GetHashCode();
                 hashCode = (hashCode * 397) ^ receipted.GetHashCode();
                 hashCode = (hashCode * 397) ^ line_segno.GetHashCode();
+                hashCode = (hashCode * 397) ^ FinancialYear.GetHashCode();
+                hashCode = (hashCode * 397) ^ PeriodNumber.GetHashCode();
+                hashCode = (hashCode * 397) ^ Comments.GetHashCode();
                 return hashCode;
             }
         }
