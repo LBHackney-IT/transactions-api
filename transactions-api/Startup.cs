@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using transactions_api.UseCase.V1;
+using transactions_api.UseCase;
 using transactions_api.V1.Boundary;
 using UnitTests.V1.Gateways;
 using Microsoft.AspNetCore.Mvc.Versioning;

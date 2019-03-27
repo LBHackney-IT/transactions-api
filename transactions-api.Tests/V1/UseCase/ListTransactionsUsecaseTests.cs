@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bogus;
 using NUnit.Framework;
-using transactions_api.UseCase.V1;
+using transactions_api.UseCase;
 using transactions_api.V1.Boundary;
 using transactions_api.V1.Domain;
 using Moq;

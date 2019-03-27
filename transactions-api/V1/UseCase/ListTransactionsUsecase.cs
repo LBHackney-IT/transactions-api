@@ -3,7 +3,7 @@ using transactions_api.V1.Boundary;
 using transactions_api.V1.Helpers;
 using UnitTests.V1.Gateways;
 
-namespace transactions_api.UseCase.V1
+namespace transactions_api.UseCase
 {
     public class ListTransactionsUsecase : IListTransactions
     {
