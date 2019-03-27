@@ -59,4 +59,5 @@ bin/
 .idea/
 tmp/
 /.vs
+transactions-api.xml
 /transactions-api.Tests/Properties/launchSettings.json
