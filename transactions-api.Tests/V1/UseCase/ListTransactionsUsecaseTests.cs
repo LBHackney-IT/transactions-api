@@ -72,7 +72,6 @@ namespace UnitTests.V1.UseCase
 
             _transactionsGateway.Setup(foo => foo.GetTransactionsByPropertyRef(propertyRef)).Returns(response);
 
-
             var result = _classUnderTest.Execute(request);
 
             Assert.AreEqual(response, result.Transactions);
