@@ -12,15 +12,7 @@ namespace transactions_api.Tests.V1.Helper
 {
     [TestFixture]
     public class RunningBalanceHelperTest
-    {
-        private Faker _faker;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _faker = new Faker();
-        }
-
+    { 
         [Test]
         public void CalculateRunningBalance_ShouldReturnCorrectCalculations()
         {
