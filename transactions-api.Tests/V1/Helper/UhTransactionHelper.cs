@@ -16,6 +16,7 @@ namespace UnitTests.V1.Helper
             UhTransaction uhTransaction = CopyTransactionFields(transaction);
             uhTransaction.Id = _faker.Random.Int();
             uhTransaction.PropRef = _faker.Random.AlphaNumeric(length: 12);
+            uhTransaction.TagRef = _faker.Random.AlphaNumeric(length: 9);
             uhTransaction.transno = _faker.Random.Int();
             uhTransaction.line_no = _faker.Random.Int();
             uhTransaction.adjustment = _faker.Random.Bool();
@@ -23,6 +24,7 @@ namespace UnitTests.V1.Helper
             uhTransaction.prop_deb = _faker.Random.Bool();
             uhTransaction.none_rent = _faker.Random.Bool();
             uhTransaction.receipted = _faker.Random.Bool();
+            uhTransaction.vat = _faker.Random.Bool();
           
             return uhTransaction;
         }

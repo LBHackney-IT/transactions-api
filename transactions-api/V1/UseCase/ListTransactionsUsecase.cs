@@ -16,7 +16,7 @@ namespace transactions_api.UseCase
 
         public ListTransactionsResponse Execute(ListTransactionsRequest listTransactionsRequest)
         {
-            var results = _transactionsGateway.GetTransactionsByPropertyRef(listTransactionsRequest.PropertyRef);
+            var results = _transactionsGateway.GetTransactionsByTagRef(listTransactionsRequest.TagRef);
 
             results = results?.CalculateRunningBalance();
 

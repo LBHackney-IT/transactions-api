@@ -36,12 +36,12 @@ namespace UnitTests.V1.UseCase
         [Test]
         public void CanGetListOfTransactionsByPropertyReference()
         {
-            var propertyRef = _faker.Random.Hash();
-            var request = new ListTransactionsRequest {PropertyRef = propertyRef};
+            var tagRef = _faker.Random.Hash();
+            var request = new ListTransactionsRequest {TagRef = tagRef};
 
             List<Transaction> response = new List<Transaction> {new Transaction()};
 
-            _transactionsGateway.Setup(foo => foo.GetTransactionsByPropertyRef(propertyRef)).Returns(response);
+            _transactionsGateway.Setup(foo => foo.GetTransactionsByTagRef(tagRef)).Returns(response);
 
             var results = _classUnderTest.Execute(request);
 
@@ -50,31 +50,31 @@ namespace UnitTests.V1.UseCase
             Assert.IsInstanceOf<Transaction>(results.Transactions.First());
 
             Assert.IsInstanceOf<ListTransactionsRequest>(results.Request);
-            Assert.AreEqual(propertyRef, results.Request.PropertyRef);
+            Assert.AreEqual(tagRef, results.Request.TagRef);
         }
 
         [Test]
         public void ExecuteCallsTransactionGateway()
         {
-            var propertyRef = _faker.Random.Hash();
+            var tagRef = _faker.Random.Hash();
 
-            var request = new ListTransactionsRequest {PropertyRef = propertyRef};
+            var request = new ListTransactionsRequest {TagRef = tagRef};
 
             _classUnderTest.Execute(request);
 
-            _transactionsGateway.Verify(gateway => gateway.GetTransactionsByPropertyRef(propertyRef));
+            _transactionsGateway.Verify(gateway => gateway.GetTransactionsByTagRef(tagRef));
         }
 
         [Test]
         public void ExecuteReturnsResponceUsingGatewayResults()
         {
-            var propertyRef = _faker.Random.Hash();
+            var tagRef = _faker.Random.Hash();
 
-            var request = new ListTransactionsRequest {PropertyRef = propertyRef};
+            var request = new ListTransactionsRequest {TagRef = tagRef};
 
             List<Transaction> response = new List<Transaction>{ new Transaction(), new Transaction()};
 
-            _transactionsGateway.Setup(foo => foo.GetTransactionsByPropertyRef(propertyRef)).Returns(response);
+            _transactionsGateway.Setup(foo => foo.GetTransactionsByTagRef(tagRef)).Returns(response);
 
             var result = _classUnderTest.Execute(request);
 
@@ -87,15 +87,15 @@ namespace UnitTests.V1.UseCase
         [TestCase("asdasdas")]
         public void ExecuteReturnsOBjectWithRunningBalancePopulated(string propRef)
         {
-            var propertyRef = propRef;
-            var request = new ListTransactionsRequest(){PropertyRef = propertyRef};
+            var tagRef = propRef;
+            var request = new ListTransactionsRequest(){TagRef = tagRef};
 
             Transaction transactionA = TransactionHelper.CreateTransaction();
             Transaction transactionB = TransactionHelper.CreateTransaction();
 
             List<Transaction> listOfTransactions = new List<Transaction>() { transactionA, transactionB };
 
-            _transactionsGateway.Setup(x => x.GetTransactionsByPropertyRef(propertyRef)).Returns(listOfTransactions);
+            _transactionsGateway.Setup(x => x.GetTransactionsByTagRef(tagRef)).Returns(listOfTransactions);
 
             listOfTransactions = listOfTransactions?.CalculateRunningBalance();
 
@@ -107,10 +107,10 @@ namespace UnitTests.V1.UseCase
         [Test]
         public void ExecuteReturnsOBjectWithRunningBalanceUnPopulated()
         {
-            var propertyRef = _faker.Random.Hash(9);
-            var request = new ListTransactionsRequest() { PropertyRef = propertyRef };
+            var tagRef = _faker.Random.Hash(9);
+            var request = new ListTransactionsRequest() { TagRef = tagRef };
 
-            _transactionsGateway.Setup(x => x.GetTransactionsByPropertyRef(propertyRef)).Returns(()=>null);
+            _transactionsGateway.Setup(x => x.GetTransactionsByTagRef(tagRef)).Returns(()=>null);
 
             var expectedResult = _classUnderTest.Execute(request);
 

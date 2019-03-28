@@ -22,7 +22,7 @@ namespace UnitTests.V1.Gateways
             _uhcontext = uhcontext;
         }
 
-        public List<Transaction> GetTransactionsByPropertyRef(string propertyRef)
+        public List<Transaction> GetTransactionsByTagRef(string tagRef)
         {
             var result = (from rtrans in _uhcontext.UTransactions
                           join debtype in _uhcontext.DebType
@@ -31,7 +31,7 @@ namespace UnitTests.V1.Gateways
                           join rectype in _uhcontext.RecType
                               on rtrans.Code equals rectype.rec_code into rc
                           from reccode in rc.DefaultIfEmpty()
-                          where rtrans.PropRef == propertyRef
+                          where rtrans.TagRef == tagRef
                           orderby rtrans.Date ascending
                           select new Transaction()
                           {
