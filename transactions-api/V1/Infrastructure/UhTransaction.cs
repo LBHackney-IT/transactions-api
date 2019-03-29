@@ -26,6 +26,7 @@ namespace transactions_api.V1.Domain
         [Column("post_year")] public int FinancialYear { get; set; }
         [Column("post_prdno")] public Decimal PeriodNumber { get; set; }
         [Column("post_comm")] public string Comments { get; set; }
+        [Column("vat")] public Boolean vat { get; set; }
 
         public override bool Equals(object obj)
         {

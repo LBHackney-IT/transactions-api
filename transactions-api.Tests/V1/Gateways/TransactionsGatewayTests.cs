@@ -28,8 +28,7 @@ namespace UnitTests.V1.Gateways
         [Test]
         public void GetTransactionsByPropertyRef_ReturnsEmptyArray()
         {
-            var responce = _classUnderTest.GetTransactionsByPropertyRef("random");
-
+            var responce = _classUnderTest.GetTransactionsByTagRef("random");
             Assert.AreEqual(0, responce.Count);
             Assert.AreEqual(null, responce.FirstOrDefault());
         }
@@ -55,7 +54,7 @@ namespace UnitTests.V1.Gateways
             _uhContext.RecType.Add(recType);
             _uhContext.SaveChanges();
 
-            var response = _classUnderTest.GetTransactionsByPropertyRef(dbTrans.PropRef).FirstOrDefault();
+            var response = _classUnderTest.GetTransactionsByTagRef(dbTrans.TagRef).FirstOrDefault();
 
             Assert.AreEqual(transaction.Amount, response.Amount);
             Assert.AreEqual(transaction.Code, response.Code);
