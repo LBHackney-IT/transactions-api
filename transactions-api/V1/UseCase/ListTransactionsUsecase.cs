@@ -20,6 +20,8 @@ namespace transactions_api.UseCase
 
             results = results?.CalculateRunningBalance();
 
+            results = results?.FilterTransactions(listTransactionsRequest);
+
             return new ListTransactionsResponse(results, listTransactionsRequest, DateTime.Now);
         }
     }

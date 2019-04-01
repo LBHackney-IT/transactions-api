@@ -26,7 +26,7 @@ namespace UnitTests.V1.Gateways
         }
 
         [Test]
-        public void GetTransactionsByPropertyRef_ReturnsEmptyArray()
+        public void GetTransactionsByTagRef_ReturnsEmptyArray()
         {
             var responce = _classUnderTest.GetTransactionsByTagRef("random");
             Assert.AreEqual(0, responce.Count);
@@ -35,7 +35,7 @@ namespace UnitTests.V1.Gateways
 
         [Test]
       
-        public void GetTransactionsByPropertyRef_ReturnsCorrectResponse()
+        public void GetTransactionsByTagRef_ReturnsCorrectResponse()
         {
             Transaction transaction = TransactionHelper.CreateTransaction();
 
