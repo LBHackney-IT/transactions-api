@@ -43,5 +43,43 @@ namespace transactions_api.Tests.V1.Validation
             var isValid = Validator.TryValidateObject(request, context, new List<System.ComponentModel.DataAnnotations.ValidationResult>(), true);
             Assert.True(isValid);
         }
+
+        [Test]
+        public void ModelShouldBeValidIfNoDatesArePassed()
+        {
+            var request = new ListTransactionsRequest()
+            {
+                TagRef = "tagRef"
+            };
+            var context = new ValidationContext(request);
+            var isValid = Validator.TryValidateObject(request, context, new List<System.ComponentModel.DataAnnotations.ValidationResult>(), true);
+            Assert.True(isValid);
+        }
+
+        [Test]
+        public void ModelShouldbeValidIfNoToDateIsPassed()
+        {
+            var request = new ListTransactionsRequest()
+            {
+                TagRef = "tagRef",
+                fromDate = DateTime.Today
+            };
+            var context = new ValidationContext(request);
+            var isValid = Validator.TryValidateObject(request, context, new List<System.ComponentModel.DataAnnotations.ValidationResult>(), true);
+            Assert.True(isValid);
+        }
+
+        [Test]
+        public void ModelShouldBeValidIfNoFromDateIsPassed()
+        {
+            var request = new ListTransactionsRequest()
+            {
+                TagRef = "tagRef",
+                toDate = DateTime.Today
+            };
+            var context = new ValidationContext(request);
+            var isValid = Validator.TryValidateObject(request, context, new List<System.ComponentModel.DataAnnotations.ValidationResult>(), true);
+            Assert.True(isValid);
+        }
     }
 }

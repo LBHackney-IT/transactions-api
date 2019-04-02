@@ -13,8 +13,10 @@ namespace transactions_api.V1.Validation
         {
             var model = (ListTransactionsRequest)validationContext.ObjectInstance;
             var fromDate = (DateTime)value;
+            //if user did not pass toDate, we should look at DateTime.Today
+            var toDate = model.toDate == DateTime.MinValue ? DateTime.Today : model.toDate;
             //if to date is before from date, fail validation
-            if (model.toDate < fromDate)
+            if (toDate < fromDate)
             {
                 return new ValidationResult
                     ("The start date must be earlier than the end date");
