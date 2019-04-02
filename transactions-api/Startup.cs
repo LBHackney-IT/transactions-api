@@ -94,6 +94,7 @@ namespace transactions_api
             ConfigureDbContext(services);
             RegisterGateWays(services);
             RegisterUseCases(services);
+            services.AddMvcCore().AddDataAnnotations();
         }
 
         private static void ConfigureDbContext(IServiceCollection services)

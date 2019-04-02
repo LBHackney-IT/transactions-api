@@ -51,7 +51,9 @@ namespace UnitTests.V1.Controllers
             {
                 { "request", new Dictionary<string, object>
                     {
-                        {"tagRef", request.TagRef}
+                        {"tagRef", request.TagRef},
+                        {"fromDate", request.fromDate},
+                        {"toDate", request.toDate }
                     }
                 },
                 { "generatedAt", datetime},
@@ -76,11 +78,13 @@ namespace UnitTests.V1.Controllers
             var faker = new Faker();
             var listTransactionsRequest = new ListTransactionsRequest
             {
-                TagRef = faker.Random.Hash()
+                TagRef = faker.Random.Hash(9),
+                fromDate = faker.Date.Past(),
+                toDate = DateTime.Now
             };
             return listTransactionsRequest;
         }
-
+        
         [Test]
         public void ReturnsCorrectResponseWithStatus()
         {
@@ -97,7 +101,9 @@ namespace UnitTests.V1.Controllers
             };
             var request = new ListTransactionsRequest
             {
-                TagRef = "testString"
+                TagRef = "testString",
+                fromDate = DateTime.Parse("20-03-2018"),
+                toDate = DateTime.Parse("20-03-2019")
             };
 
             var generatedAt = new DateTime(2019, 02, 22, 09, 52, 23, 23);
@@ -117,7 +123,9 @@ namespace UnitTests.V1.Controllers
             string json =
 @"{
   ""request"": {
-    ""tagRef"": ""testString""
+    ""tagRef"": ""testString"",
+    ""fromDate"": ""2018-03-20T00:00:00Z"",
+    ""toDate"": ""2019-03-20T00:00:00Z""
   },
   ""generatedAt"": ""2019-02-22T09:52:23.023Z"",
   ""transactions"": [

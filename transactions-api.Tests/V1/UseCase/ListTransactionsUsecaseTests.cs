@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
@@ -32,9 +33,8 @@ namespace UnitTests.V1.UseCase
         {
             Assert.True(_classUnderTest is IListTransactions);
         }
-
         [Test]
-        public void CanGetListOfTransactionsByPropertyReference()
+        public void CanGetListOfTransactionsByTagference()
         {
             var tagRef = _faker.Random.Hash();
             var request = new ListTransactionsRequest {TagRef = tagRef};
@@ -58,7 +58,7 @@ namespace UnitTests.V1.UseCase
         {
             var tagRef = _faker.Random.Hash();
 
-            var request = new ListTransactionsRequest {TagRef = tagRef};
+            var request = new ListTransactionsRequest {TagRef = tagRef, fromDate = _faker.Date.Past(), toDate = _faker.Date.Past() };
 
             _classUnderTest.Execute(request);
 
@@ -82,16 +82,19 @@ namespace UnitTests.V1.UseCase
 
         }
 
-        [TestCase("abc")]
-        [TestCase("bcd")]
-        [TestCase("asdasdas")]
-        public void ExecuteReturnsOBjectWithRunningBalancePopulated(string propRef)
+        [TestCase("abc","20-02-2018", "21-04-2019")]
+        [TestCase("bcd", "20-06-2018", "11-06-2019")]
+        [TestCase("asdasdas", "20-12-2018", "21-04-2019")]
+        public void ExecuteReturnsOBjectWithRunningBalancePopulated(string tagReference,string fromDate, string toDate)
         {
-            var tagRef = propRef;
-            var request = new ListTransactionsRequest(){TagRef = tagRef};
+            var tagRef = tagReference;
 
             Transaction transactionA = TransactionHelper.CreateTransaction();
+            //make transaction A and B date be within filter criteria
+            transactionA.Date = DateTime.Parse(fromDate);
             Transaction transactionB = TransactionHelper.CreateTransaction();
+            transactionB.Date = DateTime.Parse(toDate);
+            var request = new ListTransactionsRequest(){TagRef = tagRef, fromDate = DateTime.Parse(fromDate), toDate = DateTime.Parse(toDate) };
 
             List<Transaction> listOfTransactions = new List<Transaction>() { transactionA, transactionB };
 
@@ -108,7 +111,7 @@ namespace UnitTests.V1.UseCase
         public void ExecuteReturnsOBjectWithRunningBalanceUnPopulated()
         {
             var tagRef = _faker.Random.Hash(9);
-            var request = new ListTransactionsRequest() { TagRef = tagRef };
+            var request = new ListTransactionsRequest() { TagRef = tagRef, fromDate = _faker.Date.Past(), toDate = _faker.Date.Past()};
 
             _transactionsGateway.Setup(x => x.GetTransactionsByTagRef(tagRef)).Returns(()=>null);
 
@@ -117,5 +120,28 @@ namespace UnitTests.V1.UseCase
             Assert.IsNull(expectedResult.Transactions);
         }
 
+        
+        [TestCase("18-03-2018", "18-03-2019", "10-10-2008")]
+        [TestCase("20-03-2017", "01-04-2019", "10-11-2012")]
+        public void ExecuteReturnsAFilteredSetOfTransactions(string fromDate, string toDate, string outOfRangeDate)
+        {
+            var tagRef = _faker.Random.Hash(9);
+
+            Transaction transactionA = TransactionHelper.CreateTransaction();
+            transactionA.Date = DateTime.Parse(fromDate);
+            Transaction transactionB = TransactionHelper.CreateTransaction();
+            //transaction B has a date that is out of range so we can test if filtering occurs
+            transactionB.Date = DateTime.Parse(outOfRangeDate);
+            var request = new ListTransactionsRequest() { TagRef = tagRef,fromDate = DateTime.Parse(fromDate), toDate = DateTime.Parse(toDate)};
+
+            List<Transaction> listOfTransactions = new List<Transaction>() { transactionA, transactionB };
+            List<Transaction> listOfFilteredTransactions = new List<Transaction>() {transactionA};
+
+            _transactionsGateway.Setup(x => x.GetTransactionsByTagRef(tagRef)).Returns(listOfTransactions);
+
+            var expectedResult = _classUnderTest.Execute(request);
+
+            Assert.AreEqual(expectedResult.Transactions, listOfFilteredTransactions);
+        }
     }
 }
