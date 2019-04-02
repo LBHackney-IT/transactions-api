@@ -84,7 +84,7 @@ namespace UnitTests.V1.Controllers
             };
             return listTransactionsRequest;
         }
-
+        
         [Test]
         public void ReturnsCorrectResponseWithStatus()
         {

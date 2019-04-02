@@ -12,7 +12,7 @@ using UnitTests.V1.Helper;
 namespace transactions_api.Tests.V1.Helper
 {
     [TestFixture]
-    public class TransactionsFilterHelperTests
+    public class TransactionsFiltersTests
     {
 
         private Faker _faker;
@@ -39,7 +39,7 @@ namespace transactions_api.Tests.V1.Helper
 
             ListTransactionsRequest request = new ListTransactionsRequest(){TagRef = _faker.Random.Hash(9), fromDate = DateTime.Parse(fromDate), toDate = DateTime.Parse(toDate)};
 
-            var expectedResult = TransactionsFilterHelper.FilterTransactions(listOfTransactions, request);
+            var expectedResult = listOfTransactions.FilterTransactions(request);
             Assert.AreEqual(expectedResult, filteredTransactions);
         }
     }

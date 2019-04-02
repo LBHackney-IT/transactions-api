@@ -19,7 +19,7 @@ namespace transactions_api.UseCase
             var results = _transactionsGateway.GetTransactionsByTagRef(listTransactionsRequest.TagRef);
 
             results = results?.CalculateRunningBalance();
-
+              
             results = results?.FilterTransactions(listTransactionsRequest);
 
             return new ListTransactionsResponse(results, listTransactionsRequest, DateTime.Now);

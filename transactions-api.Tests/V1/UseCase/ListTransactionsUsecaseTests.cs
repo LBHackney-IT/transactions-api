@@ -33,7 +33,6 @@ namespace UnitTests.V1.UseCase
         {
             Assert.True(_classUnderTest is IListTransactions);
         }
-
         [Test]
         public void CanGetListOfTransactionsByTagference()
         {
@@ -121,7 +120,7 @@ namespace UnitTests.V1.UseCase
             Assert.IsNull(expectedResult.Transactions);
         }
 
-
+        
         [TestCase("18-03-2018", "18-03-2019", "10-10-2008")]
         [TestCase("20-03-2017", "01-04-2019", "10-11-2012")]
         public void ExecuteReturnsAFilteredSetOfTransactions(string fromDate, string toDate, string outOfRangeDate)
@@ -144,6 +143,5 @@ namespace UnitTests.V1.UseCase
 
             Assert.AreEqual(expectedResult.Transactions, listOfFilteredTransactions);
         }
-
     }
 }
