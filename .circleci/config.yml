@@ -58,7 +58,7 @@ jobs:
       - image: circleci/python:3.7
     steps:
       - deploy-env:
-          cluster-name: 'ecs-hackney-apps-development'
+          cluster-name: 'hackney-apps-development'
           service-name: 'transactions-api-development'
           image-tag: "$CIRCLE_SHA1"
 
@@ -67,7 +67,7 @@ jobs:
       - image: circleci/python:3.7
     steps:
       - deploy-env:
-          cluster-name: 'ecs-hackney-apps-staging'
+          cluster-name: 'hackney-apps-staging'
           service-name: 'transactions-api-staging'
           image-tag: "$CIRCLE_SHA1"
 
