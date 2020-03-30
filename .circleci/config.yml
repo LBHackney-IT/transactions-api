@@ -203,7 +203,7 @@ jobs:
     steps:
       - build_and_push_image:
           dockerfile: ./transactions-api/Dockerfile
-          path: $PROJECT_PATH 
+          path: ./transactions-api
           account-url: AWS_ECR_HOST_DEVELOPMENT
           repo: $AWS_ECR_PATH_DEV
           region: AWS_REGION
