@@ -204,7 +204,7 @@ jobs:
       - build_and_push_image:
           dockerfile: ./transactions-api/Dockerfile
           path: $PROJECT_PATH 
-          account-url: $AWS_ECR_HOST_DEVELOPMENT
+          account-url: AWS_ECR_HOST_DEVELOPMENT
           repo: $AWS_ECR_PATH_DEV
           region: AWS_REGION
           tag: "${CIRCLE_SHA1}"
@@ -216,7 +216,7 @@ jobs:
       - build_and_push_image:
           dockerfile: ./transactions-api/Dockerfile
           path: $PROJECT_PATH 
-          account-url: $AWS_ECR_HOST_STAGING
+          account-url: AWS_ECR_HOST_STAGING
           repo: $AWS_ECR_PATH_STAGING
           region: AWS_REGION
           tag: "${CIRCLE_SHA1}"
@@ -228,7 +228,7 @@ jobs:
       - build_and_push_image:
           dockerfile: ./mat-process-api/Dockerfile
           path: $PROJECT_PATH 
-          account-url: $AWS_ECR_HOST_PRODUCTION
+          account-url: AWS_ECR_HOST_PRODUCTION
           repo: $AWS_ECR_PATH_PRODUCTION
           region: AWS_REGION
           tag: "${CIRCLE_SHA1}"
