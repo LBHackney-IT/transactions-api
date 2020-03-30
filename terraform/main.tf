@@ -26,7 +26,7 @@ module "development" {
   ecr_name                    = "hackney/transactions-api"
   environment_name            = "development"
   application_name            = "transactions-api"    # Replace with your application name.
-  security_group_name         = "sg-transactions-api" # Replace with your security group name, WITHOUT SPECIFYING environment .
+  security_group_name         = "transactions-api" # Replace with your security group name, WITHOUT SPECIFYING environment .
   vpc_name                    = "vpc-development-apis"
   host_port                   = 1002
   port                        = 1002
