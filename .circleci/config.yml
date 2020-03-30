@@ -167,9 +167,9 @@ jobs:
       - run:
           name: build
           command: docker-compose build transactions-api-test
-      - run:
-          name: Run tests
-          command: docker-compose run transactions-api-test
+     # - run:
+     #     name: Run tests
+     #     command: docker-compose run transactions-api-test
   deploy-to-development:
     executor: docker-python
     steps:
