@@ -160,11 +160,7 @@ namespace UnitTests.V1.Controllers
         public void given_a_request_object_when_GetAllTenancyTransactions_controller_method_is_called_then_it_calls_the_validator_with_that_request_object()
         {
             //arrange
-            var request = new GetAllTenancyTransactionsRequest()
-            {
-                PaymentRef = _faker.Random.Hash(),
-                PostCode = _faker.Address.ZipCode()
-            };
+            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
 
             _mockGetTenancyTransactionsValidator.Setup(x => x.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(new FV.ValidationResult()); //setup validator to return a no error validation result
 
