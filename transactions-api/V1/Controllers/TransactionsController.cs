@@ -28,5 +28,13 @@ namespace transactions_api.Controllers.V1
             var usecaseResponce = _listTransactions.Execute(request);
             return new JsonResult(usecaseResponce) {StatusCode = 200};
         }
+
+        [HttpGet]
+        [Route("payment-ref/{payment_ref}/post-code/{post_code}")] //should we add "GetAllTenancyTransactions/" to the start of the url?
+        [Produces("application/json")]
+        public IActionResult GetAllTenancyTransactions([FromRoute] GetAllTenancyTransactionsRequest request)
+        {
+            return Ok(new { }); // had to use anonymous object, because if no object is put inside Ok(), it will produce OkResult, not OkObjectResult, which we want down the line...
+        }
     }
 }

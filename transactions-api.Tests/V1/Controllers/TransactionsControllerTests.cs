@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Bogus;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
@@ -31,6 +32,8 @@ namespace UnitTests.V1.Controllers
             ILogger<TransactionsController> nullLogger = NullLogger<TransactionsController>.Instance;
             _classUnderTest = new TransactionsController(_mockListTransacionsUsecase.Object, nullLogger);
         }
+
+        #region Transactions in General
 
         [Test]
         public void ReturnsCorrectRandomResponseWithStatus()
@@ -143,5 +146,29 @@ namespace UnitTests.V1.Controllers
 }";
             return json;
         }
+
+        #endregion
+
+        #region Tenancy Transactions
+
+        [Test]
+        public void given_a_valid_input_when_GetAllTenancyTransactions_controller_method_is_called_then_it_returns_200_Ok_result()
+        {
+            //arrange
+            var expectedStatusCode = 200;
+            //TODO: Add validator mock setup to return no errors, when one is created!
+
+            //act
+            var controllerResponse = _classUnderTest.GetAllTenancyTransactions(new GetAllTenancyTransactionsRequest());
+            var result = controllerResponse as ObjectResult;
+
+            //assert
+            Assert.NotNull(controllerResponse);
+            Assert.NotNull(result);
+            Assert.IsInstanceOf<OkObjectResult>(result);
+            Assert.AreEqual(expectedStatusCode, result.StatusCode);
+        }
+
+        #endregion
     }
 }
