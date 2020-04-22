@@ -2,6 +2,8 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using transactions_api.V1.Boundary;
+using transactions_api.V1.Exceptions;
+using transactions_api.V1.Validation;
 
 namespace transactions_api.Controllers.V1
 {
@@ -13,11 +15,13 @@ namespace transactions_api.Controllers.V1
     {
         private readonly IListTransactions _listTransactions;
         private readonly ILogger<TransactionsController> _logger;
+        private readonly IGetTenancyTransactionsValidator _getTenancyTransactionsValidator;
 
-        public TransactionsController(IListTransactions listTransactions, ILogger<TransactionsController> logger)
+        public TransactionsController(IListTransactions listTransactions, ILogger<TransactionsController> logger, IGetTenancyTransactionsValidator getTenancyTransactionsValidator)
         {
             _listTransactions = listTransactions;
             _logger = logger;
+            _getTenancyTransactionsValidator = getTenancyTransactionsValidator;
         }
 
         [ProducesResponseType(typeof(ListTransactionsResponse), 200)]
@@ -34,7 +38,16 @@ namespace transactions_api.Controllers.V1
         [Produces("application/json")]
         public IActionResult GetAllTenancyTransactions([FromRoute] GetAllTenancyTransactionsRequest request)
         {
-            return Ok(new { }); // had to use anonymous object, because if no object is put inside Ok(), it will produce OkResult, not OkObjectResult, which we want down the line...
+            var validationResult = _getTenancyTransactionsValidator.Validate(request);
+            
+            if (validationResult.IsValid)
+            {
+                return Ok(new { }); // had to use anonymous object, because if no object is put inside Ok(), it will produce OkResult, not OkObjectResult, which we want down the line...
+            }
+
+            return BadRequest(
+                    new ErrorResponse(validationResult.Errors)
+                );
         }
     }
 }
