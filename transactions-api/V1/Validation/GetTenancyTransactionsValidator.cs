@@ -13,6 +13,7 @@ namespace transactions_api.V1.Validation
     {
         public GetTenancyTransactionsValidator()
         {
+            ValidatorOptions.Global.CascadeMode = CascadeMode.StopOnFirstFailure;
             RuleFor(request => request.PaymentRef)
                 .NotNull().WithMessage(ErrorMessagesFormatter.FieldIsNullMessage("Payment reference"))
                 .NotEmpty().WithMessage(ErrorMessagesFormatter.FieldIsWhiteSpaceOrEmpty("Payment reference"));
