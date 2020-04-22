@@ -36,5 +36,20 @@ namespace transactions_api.V1.Helpers
         {
             return $"Property {propertyName} failed validation. Error was: {errorMessage}";
         }
+
+        public static string FieldIsNullMessage(string fieldName)
+        {
+            return $"{fieldName} must be provided.";
+        }
+
+        public static string FieldIsWhiteSpaceOrEmpty(string fieldName)
+        {
+            return $"{fieldName} must not be empty.";
+        }
+
+        public static string FieldWithIncorrectFormat(string fieldName)
+        {
+            return $"Provided {fieldName} format is incorrect.";
+        }
     }
 }
