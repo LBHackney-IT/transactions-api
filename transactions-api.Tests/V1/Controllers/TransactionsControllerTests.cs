@@ -162,7 +162,7 @@ namespace UnitTests.V1.Controllers
             //arrange
             var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
 
-            _mockGetTenancyTransactionsValidator.Setup(x => x.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(new FV.ValidationResult()); //setup validator to return a no error validation result
+            _mockGetTenancyTransactionsValidator.Setup(x => x.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(TransactionHelper.GenerateSuccessValidationResult());
 
             //act
             _classUnderTest.GetAllTenancyTransactions(request);
@@ -176,7 +176,7 @@ namespace UnitTests.V1.Controllers
         {
             //arrange
             var expectedStatusCode = 200;
-            _mockGetTenancyTransactionsValidator.Setup(v => v.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(new FV.ValidationResult()); //mock validator says it found no errors
+            _mockGetTenancyTransactionsValidator.Setup(v => v.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(TransactionHelper.GenerateSuccessValidationResult());
 
             //act
             var controllerResponse = _classUnderTest.GetAllTenancyTransactions(new GetAllTenancyTransactionsRequest());
@@ -194,17 +194,12 @@ namespace UnitTests.V1.Controllers
         {
             //arrange
             var expectedStatusCode = 400;
-            var request = new GetAllTenancyTransactionsRequest();                                                                                       //an empty request will be invalid
 
-            int errorCount = _faker.Random.Int(1, 10);                                                                                                  //simulate from 1 to 10 validation errors (triangulation).
-            var validationErrorList = new List<ValidationFailure>();                                                                                    //this list will be used as constructor argument for 'ValidationResult'.
-            for (int i = errorCount; i > 0; i--) { validationErrorList.Add(new ValidationFailure(_faker.Random.Word(), _faker.Random.Word())); }        //generate from 1 to 10 fake validation errors. Single line for-loop so that it wouldn't distract from what's key in this test.
-
-            var fakeValidationResult = new FV.ValidationResult(validationErrorList);                                                                    //Need to create ValidationResult so that I could setup Validator mock to return it upon '.Validate()' call. Also this is the only place where it's possible to manipulate the validation result - You can only make the validation result invalid by inserting a list of validation errors as a parameter through a constructor. The boolean '.IsValid' comes from expression 'IsValid => Errors.Count == 0;', so it can't be set manually.
+            var fakeValidationResult = TransactionHelper.GenerateFailedValidationResult();
             _mockGetTenancyTransactionsValidator.Setup(v => v.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(fakeValidationResult);    //mock validator says that it has found errors
 
             //act
-            var controllerResponse = _classUnderTest.GetAllTenancyTransactions(request);
+            var controllerResponse = _classUnderTest.GetAllTenancyTransactions(new GetAllTenancyTransactionsRequest());
             var result = controllerResponse as ObjectResult;
 
             //assert
@@ -218,20 +213,11 @@ namespace UnitTests.V1.Controllers
         public void given_an_invalid_request_when_GetAllTenancyTransactions_controller_method_is_called_then_returned_BadRequestObjectResult_contains_correctly_formatter_error_response()
         {
             //arrange
-            var expectedStatusCode = 400;
-            var request = new GetAllTenancyTransactionsRequest();                                                                                       //an empty request will be invalid
-
-            int errorCount = _faker.Random.Int(1, 10);                                                                                                  //simulate from 1 to 10 validation errors (triangulation).
-            var validationErrorList = new List<ValidationFailure>();                                                                                    //this list will be used as constructor argument for 'ValidationResult'.
-            for (int i = errorCount; i > 0; i--) { validationErrorList.Add(new ValidationFailure(_faker.Random.Word(), _faker.Random.Word())); }        //generate from 1 to 10 fake validation errors. Single line for-loop so that it wouldn't distract from what's key in this test.
-
-            var fakeValidationResult = new FV.ValidationResult(validationErrorList);                                                                    //Need to create ValidationResult so that I could setup Validator mock to return it upon '.Validate()' call. Also this is the only place where it's possible to manipulate the validation result - You can only make the validation result invalid by inserting a list of validation errors as a parameter through a constructor. The boolean '.IsValid' comes from expression 'IsValid => Errors.Count == 0;', so it can't be set manually.
+            var fakeValidationResult = TransactionHelper.GenerateFailedValidationResult();
             _mockGetTenancyTransactionsValidator.Setup(v => v.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(fakeValidationResult);    //mock validator says that it has found errors
 
-            var expectedControllerResponse = new BadRequestObjectResult(validationErrorList);                                                           //build up expected controller response to check if the contents of the errors match - that's probably the easiest way to check that.
-
             //act
-            var controllerResponse = _classUnderTest.GetAllTenancyTransactions(request);
+            var controllerResponse = _classUnderTest.GetAllTenancyTransactions(new GetAllTenancyTransactionsRequest());
             var result = controllerResponse as ObjectResult;
             var errorResponse = result.Value as ErrorResponse;
 
@@ -247,7 +233,7 @@ namespace UnitTests.V1.Controllers
 
             Assert.IsInstanceOf<List<string>>(errorResponse.errors);
             Assert.NotNull(errorResponse.errors);
-            Assert.AreEqual(errorCount, errorResponse.errors.Count);
+            Assert.AreEqual(fakeValidationResult.Errors.Count, errorResponse.errors.Count);
         }
 
         #endregion

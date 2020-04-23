@@ -8,6 +8,7 @@ using Bogus;
 using transactions_api.V1.Exceptions;
 using NUnit.Framework;
 using transactions_api.V1.Helpers;
+using UnitTests.V1.Helper;
 
 namespace transactions_api.Tests.V1.Exceptions
 {
@@ -63,15 +64,14 @@ namespace transactions_api.Tests.V1.Exceptions
         public void given_a_list_of_validation_failures_when_ErrorResponse_constructor_is_called_then_it_initializes_errors_parameter_to_a_list_of_error_messages()
         {
             //arrange
-            int errorCount = _faker.Random.Int(1, 10);                                                                                                     //simulate from 1 to 10 validation errors (triangulation).
-            var validationFailuresList = new List<ValidationFailure>();                                                                                    //this list will be used as constructor argument for 'ValidationResult'.
-            for (int i = errorCount; i > 0; i--) { validationFailuresList.Add(new ValidationFailure(_faker.Random.Word(), _faker.Random.Word())); }        //generate from 1 to 10 fake validation errors. Single line for-loop so that it wouldn't distract from what's key in this test.
+            var validationFailuresList = TransactionHelper.GenerateAListOfValidationFailures();
 
             //act
             var errorResponse = new ErrorResponse(validationFailuresList);
 
             //assert
-            Assert.AreEqual(errorCount, errorResponse.errors.Count);
+            Assert.IsInstanceOf<List<string>>(errorResponse.errors);
+            Assert.AreEqual(validationFailuresList.Count, errorResponse.errors.Count);
         }
     }
 }
