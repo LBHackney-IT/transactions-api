@@ -27,6 +27,9 @@ namespace transactions_api.UseCase
 
         public GetAllTenancyTransactionsResponse ExecuteGetTenancyTransactions(GetAllTenancyTransactionsRequest request)
         {
+            //GetTenancyAgreementDetails(pay_ref, postcode) --> tag_ref, cur_bal
+
+            //GetAllTenancyTransactionStatements(tag_ref) --> get back a list...o TOP 5
             throw new NotImplementedException();
         }
     }

@@ -8,6 +8,7 @@ using UnitTests.V1.Infrastructure;
 using System.Data.SqlClient;
 using System.Reflection.PortableExecutable;
 using Microsoft.EntityFrameworkCore;
+using Dapper;
 
 namespace UnitTests.V1.Gateways
 {
@@ -15,6 +16,7 @@ namespace UnitTests.V1.Gateways
     {
         private readonly IUHContext _uhcontext;
         private readonly TransactionFactory _transactionFactory;
+        private readonly string _uhliveTransconnstring = Environment.GetEnvironmentVariable("UH_URL");
 
         public TransactionsGateway(IUHContext uhcontext)
         {
@@ -57,7 +59,7 @@ namespace UnitTests.V1.Gateways
 
         //---------------------------------- Ported Code from NCC API (start) --------------------------------//
 
-        public List<TenancyTransactions> GetAllTenancyTransactions(string tenancyAgreementRef, string startdate, string endDate)
+        public List<TempTenancyTransaction> GetAllTenancyTransactions(string tenancyAgreementRef, string startdate, string endDate)
         {
             SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
             uhtconn.Open();
@@ -109,17 +111,17 @@ namespace UnitTests.V1.Gateways
                     ORDER  BY post_date DESC, 
                               transno ASC 
                 ";
-            var results = uhtconn.Query<TenancyTransactions>(query, new { tenancyAgreementRef, fstartDate, fendDate }).ToList();
+            var results = uhtconn.Query<TempTenancyTransaction>(query, new { tenancyAgreementRef, fstartDate, fendDate }).ToList();
             uhtconn.Close();
             return results;
         }
 
-        public TenancyAgreementDetials GetTenancyAgreementDetails(string tenancyAgreementRef)
+        public TenancyAgreementDetails GetTenancyAgreementDetails(string tenancyAgreementRef)
         {
             SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
             uhtconn.Open();
 
-            var result = uhtconn.QueryFirstOrDefault<TenancyAgreementDetials>(
+            var result = uhtconn.QueryFirstOrDefault<TenancyAgreementDetails>(
                 @"
                     SELECT cur_bal                           AS CurrentBalance, 
                            ( cur_bal *- 1 )                  AS DisplayBalance, 
@@ -142,17 +144,17 @@ namespace UnitTests.V1.Gateways
 
         }
 
-        public List<TenancyTransactionStatements> GetAllTenancyTransactionStatements(string tenancyAgreementId, string startdate, string endDate)
+        public List<TenancyTransaction> GetAllTenancyTransactionStatements(string tenancyAgreementId, string startdate, string endDate)
         {
-            TenancyAgreementDetials tenantDet = GetTenancyAgreementDetails(tenancyAgreementId);
-            List<TenancyTransactions> lstTransactions = GetAllTenancyTransactions(tenancyAgreementId, startdate, endDate);
-            List<TenancyTransactionStatements> lstTransactionsState = new List<TenancyTransactionStatements>();
+            TenancyAgreementDetails tenantDet = GetTenancyAgreementDetails(tenancyAgreementId);
+            List<TempTenancyTransaction> lstTransactions = GetAllTenancyTransactions(tenancyAgreementId, startdate, endDate);
+            List<TenancyTransaction> lstTransactionsState = new List<TenancyTransaction>();
             float RecordBalance = 0;
             RecordBalance = float.Parse(tenantDet.CurrentBalance);
 
-            foreach (TenancyTransactions trans in lstTransactions)
+            foreach (TempTenancyTransaction trans in lstTransactions)
             {
-                TenancyTransactionStatements statement = new TenancyTransactionStatements();
+                TenancyTransaction statement = new TenancyTransaction();
                 var DebitValue = "";
                 var CreditValue = "";
                 float fDebitValue = 0F;
