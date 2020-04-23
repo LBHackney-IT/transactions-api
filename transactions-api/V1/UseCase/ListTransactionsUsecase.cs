@@ -24,5 +24,10 @@ namespace transactions_api.UseCase
 
             return new ListTransactionsResponse(results, listTransactionsRequest, DateTime.Now);
         }
+
+        public GetAllTenancyTransactionsResponse ExecuteGetTenancyTransactions(GetAllTenancyTransactionsRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

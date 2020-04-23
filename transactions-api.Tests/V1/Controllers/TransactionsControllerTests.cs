@@ -236,6 +236,74 @@ namespace UnitTests.V1.Controllers
             Assert.AreEqual(fakeValidationResult.Errors.Count, errorResponse.errors.Count);
         }
 
+        [Test]
+        public void given_successful_request_validation_when_GetAllTenancyTransactions_controller_method_is_called_then_it_calls_usecase()
+        {
+            //arrange
+            _mockGetTenancyTransactionsValidator.Setup(x => x.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(TransactionHelper.GenerateSuccessValidationResult()); //setup validator to return a no error validation result
+
+            //act
+            _classUnderTest.GetAllTenancyTransactions(new GetAllTenancyTransactionsRequest());
+
+            //assert
+            _mockListTransacionsUsecase.Verify(u => u.ExecuteGetTenancyTransactions(It.IsAny<GetAllTenancyTransactionsRequest>()), Times.Once);
+        }
+
+        [Test]
+        public void given_successful_request_validation_when_GetAllTenancyTransactions_controller_method_is_called_then_it_calls_usecase_with_corresponding_request_object()
+        {
+            //arrange
+            var expectedRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            _mockGetTenancyTransactionsValidator.Setup(x => x.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(TransactionHelper.GenerateSuccessValidationResult()); //setup validator to return a no error validation result
+
+            //act
+            _classUnderTest.GetAllTenancyTransactions(expectedRequest);
+
+            //assert
+            _mockListTransacionsUsecase.Verify(
+                u => u.ExecuteGetTenancyTransactions(
+                    It.Is<GetAllTenancyTransactionsRequest>(
+                        r =>
+                            r.PaymentRef == expectedRequest.PaymentRef &&
+                            r.PostCode   == expectedRequest.PostCode
+                    )
+                ),Times.Once);
+        }
+
+        [Test]
+        public void given_unsuccessful_request_validation_when_GetAllTenancyTransactions_controller_method_is_called_then_it_does_not_call_usecase()
+        {
+            //arrange
+            _mockGetTenancyTransactionsValidator.Setup(x => x.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(TransactionHelper.GenerateFailedValidationResult()); //setup validator to return a no error validation result
+
+            //act
+            _classUnderTest.GetAllTenancyTransactions(new GetAllTenancyTransactionsRequest());
+
+            //assert
+            _mockListTransacionsUsecase.Verify(u => u.ExecuteGetTenancyTransactions(It.IsAny<GetAllTenancyTransactionsRequest>()), Times.Never);
+        }
+
+        [Test]
+        public void given_successful_request_validation_when_GetAllTenancyTransactions_controller_method_is_called_it_returns_the_same_object_usecase_returned()                    //but wrapped up - no point in saying in test name, since there are other tests that check wrapping up
+        {
+            //arrange
+            var expectedResponse = TransactionHelper.CreateGetAllTenancyTransactionsResponseObject();
+            _mockListTransacionsUsecase.Setup(u => u.ExecuteGetTenancyTransactions(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(expectedResponse);
+            _mockGetTenancyTransactionsValidator.Setup(x => x.Validate(It.IsAny<GetAllTenancyTransactionsRequest>())).Returns(TransactionHelper.GenerateSuccessValidationResult());
+
+            //act
+            var controllerResponse = _classUnderTest.GetAllTenancyTransactions(new GetAllTenancyTransactionsRequest());
+            var controllerResult = controllerResponse as ObjectResult;
+            var actualResponse = controllerResult.Value as GetAllTenancyTransactionsResponse;
+
+            //assert
+            Assert.NotNull(controllerResponse);
+            Assert.NotNull(controllerResult);
+            Assert.NotNull(actualResponse);
+
+            Assert.AreSame(expectedResponse, actualResponse);                                                                                                                       //if they're the same object, then it means that controller is indeed simply wrapping up and passing back whatever the usecase returns
+        }
+
         #endregion
     }
 }

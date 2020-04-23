@@ -42,7 +42,9 @@ namespace transactions_api.Controllers.V1
             
             if (validationResult.IsValid)
             {
-                return Ok(new { }); // had to use anonymous object, because if no object is put inside Ok(), it will produce OkResult, not OkObjectResult, which we want down the line...
+                var usecaseResponse = _listTransactions.ExecuteGetTenancyTransactions(request);
+
+                return Ok(usecaseResponse);
             }
 
             return BadRequest(

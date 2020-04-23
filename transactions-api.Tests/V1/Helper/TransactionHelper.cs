@@ -4,6 +4,7 @@ using FV = FluentValidation.Results;
 using System.Collections.Generic;
 using transactions_api.V1.Boundary;
 using transactions_api.V1.Domain;
+using System;
 
 namespace UnitTests.V1.Helper
 {
@@ -61,6 +62,8 @@ namespace UnitTests.V1.Helper
 
         #endregion
 
+        #region Create Random Request Objects
+
         public static GetAllTenancyTransactionsRequest CreateGetAllTenancyTransactionsRequestObject()
         {
             return new GetAllTenancyTransactionsRequest()
@@ -70,6 +73,22 @@ namespace UnitTests.V1.Helper
             };
         }
 
+        #endregion
+
+        #region Create Random Response Objects
+
+        public static GetAllTenancyTransactionsResponse CreateGetAllTenancyTransactionsResponseObject()
+        {
+            return new GetAllTenancyTransactionsResponse()
+            {
+                GeneratedAt = DateTime.Now,
+                Request = CreateGetAllTenancyTransactionsRequestObject(),
+                Transactions = CreateTenancyTransactionList(5),
+                CurrentBalance = _faker.Finance.Amount(-1000, 1000, 2).ToString()
+            };
+        }
+
+        #endregion
 
         #region Fake Validation Results
 
