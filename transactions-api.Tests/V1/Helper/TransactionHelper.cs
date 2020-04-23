@@ -11,6 +11,8 @@ namespace UnitTests.V1.Helper
     {
         private static Faker _faker = new Faker("en_GB");
 
+        #region Create Random Domain Object
+
         public static Transaction CreateTransaction()
         {
             var transaction = new Transaction
@@ -26,6 +28,38 @@ namespace UnitTests.V1.Helper
             };
             return transaction;
         }
+
+        private static TempTenancyTransaction CreateTempTenancyTransaction()                                    //Will need to change, once this port gets re-done properly.
+        {
+            return new TempTenancyTransaction()
+            {
+                Date = _faker.Date.Past().ToString("dd/MM/yyyy HH:mm:ss"),
+                Amount = _faker.Finance.Amount(-500, 500, 2).ToString(),
+                Type = _faker.Random.Word(),
+                Description = _faker.Random.Words(3)
+            };
+        }
+
+        public static List<TenancyTransaction> CreateTenancyTransactionList(int quantityMax)                     //Same here, this doesn't generate proper interconnected balances or anything, it just fill them in.
+        {
+            var transactions = new List<TenancyTransaction>();
+
+            for (int i = _faker.Random.Int(1, quantityMax); i > 0; i--)
+            {
+                var tempTransaction = CreateTempTenancyTransaction();
+                transactions.Add(new TenancyTransaction() {
+                    Balance = _faker.Finance.Amount(-2000, 2000, 2).ToString(),
+                    Date = tempTransaction.Date,
+                    Description = tempTransaction.Description,
+                    In = double.Parse(tempTransaction.Amount) >= 0 ? tempTransaction.Amount : null,
+                    Out = double.Parse(tempTransaction.Amount) >= 0 ? null : tempTransaction.Amount,
+                });
+            }
+
+            return transactions;
+        }
+
+        #endregion
 
         public static GetAllTenancyTransactionsRequest CreateGetAllTenancyTransactionsRequestObject()
         {

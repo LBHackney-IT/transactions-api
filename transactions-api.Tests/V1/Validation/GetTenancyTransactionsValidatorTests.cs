@@ -264,7 +264,7 @@ namespace transactions_api.Tests.V1.Validation
         }
 
         [Test]
-        public void given_a_request_with_valid_PostCode_guid_when_GetTenancyTransactionsValidator_is_called_then_it_returns_no_error() //if this ever fails, it's probably because faker isn't generating correct code
+        public void given_a_request_with_valid_PostCode_when_GetTenancyTransactionsValidator_is_called_then_it_returns_no_error() //if this ever fails, it's probably because faker isn't generating correct code
         {
             //arange
             var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
