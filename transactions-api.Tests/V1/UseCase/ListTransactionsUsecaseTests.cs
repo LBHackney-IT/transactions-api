@@ -33,6 +33,9 @@ namespace UnitTests.V1.UseCase
         {
             Assert.True(_classUnderTest is IListTransactions);
         }
+
+        #region GetTransactions (in general)
+
         [Test]
         public void CanGetListOfTransactionsByTagference()
         {
@@ -143,5 +146,13 @@ namespace UnitTests.V1.UseCase
 
             Assert.AreEqual(expectedResult.Transactions, listOfFilteredTransactions);
         }
+
+        #endregion
+
+        #region GetTenancyTransactions
+
+        // this is where TDD breaks down due to port being temp solution - will need to add tests in the future
+
+        #endregion
     }
 }
