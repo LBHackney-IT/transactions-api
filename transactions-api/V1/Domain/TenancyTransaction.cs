@@ -22,12 +22,17 @@ namespace transactions_api.V1.Domain                            //This is where 
         public string Description { get; set; }
     }
 
-    public class TenancyAgreementDetails                        //Added this here as it's interconnected with the rest of the code
+    public class TenancyAgreementDetails
     {
         public string CurrentBalance { get; set; }
-        public string DisplayBalance { get; set; }              //Leaving this in as they want "the data that comes from NCC".
-        public string PropertyReferenceNumber { get; set; }     //Leaving this in as they want "the data that comes from NCC".
+        public string DisplayBalance { get; set; }
+        public string Rent { get; set; }
+        public string StartDate {get; set; }
+        public string HousingReferenceNumber { get; set; }
+        public string PropertyReferenceNumber { get; set; }
+        public string TenancyAgreementReference { get; set; }     //Need this for the main query to work as usual.
         public string PaymentReferenceNumber { get; set; }
-        public string TenureType { get; set; } 
+        public bool IsAgreementTerminated { get; set; }
+        public string TenureType { get; set; }
     }
 }

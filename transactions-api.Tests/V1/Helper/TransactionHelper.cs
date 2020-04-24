@@ -60,6 +60,25 @@ namespace UnitTests.V1.Helper
             return transactions;
         }
 
+        public static TenancyAgreementDetails CreateTenancyAgreementDetails()
+        {
+            var balance = _faker.Finance.Amount(-2000, 2000, 2);
+
+            return new TenancyAgreementDetails()
+            {
+                CurrentBalance = balance.ToString(),
+                DisplayBalance = (-balance).ToString(),
+                Rent = _faker.Finance.Amount(100, 200, 2).ToString(),
+                StartDate = _faker.Date.Past().ToString("dd/MM/yyyy HH:mm:ss"),
+                HousingReferenceNumber = _faker.Random.Hash(),
+                PropertyReferenceNumber = _faker.Random.Hash(),
+                TenancyAgreementReference = _faker.Random.Hash(),
+                PaymentReferenceNumber = _faker.Random.Hash(),
+                IsAgreementTerminated = _faker.Random.Bool(),
+                TenureType = _faker.Random.Word()
+            };
+        }
+
         #endregion
 
         #region Create Random Request Objects
@@ -84,7 +103,7 @@ namespace UnitTests.V1.Helper
                 GeneratedAt = DateTime.Now,
                 Request = CreateGetAllTenancyTransactionsRequestObject(),
                 Transactions = CreateTenancyTransactionList(5),
-                CurrentBalance = _faker.Finance.Amount(-1000, 1000, 2).ToString()
+                TenancyDetails = CreateTenancyAgreementDetails()
             };
         }
 

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using transactions_api.V1.Boundary;
+using transactions_api.V1.Domain;
 using transactions_api.V1.Helpers;
 using UnitTests.V1.Gateways;
 
@@ -27,10 +29,19 @@ namespace transactions_api.UseCase
 
         public GetAllTenancyTransactionsResponse ExecuteGetTenancyTransactions(GetAllTenancyTransactionsRequest request)
         {
-            //GetTenancyAgreementDetails(pay_ref, postcode) --> tag_ref, cur_bal
+            var tenancyDetails = _transactionsGateway.GetTenancyAgreementDetails(request.PaymentRef, request.PostCode) ?? new TenancyAgreementDetails();
 
-            //GetAllTenancyTransactionStatements(tag_ref) --> get back a list...o TOP 5
-            throw new NotImplementedException();
+            var transactions = !String.IsNullOrEmpty(tenancyDetails.TenancyAgreementReference)
+                               ? _transactionsGateway.GetAllTenancyTransactionStatements(tenancyDetails.TenancyAgreementReference, request.PaymentRef, request.PostCode)
+                               : new List<TenancyTransaction>();
+
+            return new GetAllTenancyTransactionsResponse()
+            {
+                GeneratedAt = DateTime.Now,
+                Request = request,
+                Transactions = transactions,
+                TenancyDetails = tenancyDetails                                                                         //This is no longer Transactions API... it's getting back Tenancy data!
+            };
         }
     }
 }

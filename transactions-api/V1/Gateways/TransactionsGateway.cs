@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Reflection.PortableExecutable;
 using Microsoft.EntityFrameworkCore;
 using Dapper;
+using System.Text.RegularExpressions;
 
 namespace UnitTests.V1.Gateways
 {
@@ -59,18 +60,16 @@ namespace UnitTests.V1.Gateways
 
         //---------------------------------- Ported Code from NCC API (start) --------------------------------//
 
-        public List<TempTenancyTransaction> GetAllTenancyTransactions(string tenancyAgreementRef, string startdate, string endDate)
+        public List<TempTenancyTransaction> GetAllTenancyTransactions(string tenancyAgreementRef)
         {
             SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
             uhtconn.Open();
 
-            string fstartDate = Utils.FormatDate(startdate);
-            string fendDate = (!string.IsNullOrEmpty(endDate)) ? Utils.FormatDate(endDate) : DateTime.Now.ToString("yyyy-MM-dd");
-            string query =
+            string query =                                                                                      // not sure how to limit 2 different queries to 5 results (UNION). OFFSET won't work.
                 @" 
                     SELECT transno, 
                            rtrans.real_value AS Amount, 
-                           rtrans.post_date  AS date, 
+                           rtrans.post_date  AS Date, 
                            rtrans.trans_type AS Type, 
                            CASE 
                              WHEN rtrans.trans_type = 'DSB' THEN RTRIM(debtype.deb_desc) 
@@ -83,7 +82,6 @@ namespace UnitTests.V1.Gateways
                                   ON rtrans.trans_type = debtype.deb_code 
                     WHERE  tag_ref <> '' 
                            AND tag_ref <> 'ZZZZZZ' 
-                           AND post_date BETWEEN @fstartDate AND @fendDate 
                            AND tag_ref = @tenancyAgreementRef 
                            AND ( trans_type IN (SELECT rec_code 
                                                 FROM   rectype 
@@ -100,7 +98,6 @@ namespace UnitTests.V1.Gateways
                     WHERE  tag_ref <> '' 
                            AND tag_ref <> 'ZZZZZZ' 
                            AND tag_ref = @tenancyAgreementRef 
-                           AND post_date BETWEEN @fstartDate AND @fendDate 
                            AND rtrans.trans_type LIKE 'D%' 
                            AND rtrans.trans_type <> 'DSB' 
                            AND post_date = post_date 
@@ -109,33 +106,39 @@ namespace UnitTests.V1.Gateways
                               prop_ref, 
                               house_ref 
                     ORDER  BY post_date DESC, 
-                              transno ASC 
+                              transno ASC
                 ";
-            var results = uhtconn.Query<TempTenancyTransaction>(query, new { tenancyAgreementRef, fstartDate, fendDate }).ToList();
+            var results = uhtconn.Query<TempTenancyTransaction>(query, new { tenancyAgreementRef }, commandTimeout: 0).ToList();  //<--------Can do .Take(5).ToList(); also commandTimeout: 0 is a hack to get around timeout that comes out of nowhere - query runs fine on SQL management studio
             uhtconn.Close();
             return results;
         }
 
-        public TenancyAgreementDetails GetTenancyAgreementDetails(string tenancyAgreementRef)
+        public TenancyAgreementDetails GetTenancyAgreementDetails(string paymentReferenceNumber, string postcode)
         {
             SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
             uhtconn.Open();
 
+            postcode = Regex.Replace(postcode, @"\s+", String.Empty);
+
             var result = uhtconn.QueryFirstOrDefault<TenancyAgreementDetails>(
                 @"
-                    SELECT cur_bal                           AS CurrentBalance, 
-                           ( cur_bal *- 1 )                  AS DisplayBalance, 
-                           ( rent + service + other_charge ) AS Rent, 
-                           cot                               AS StartDate, 
-                           RTRIM(house_ref)                  AS HousingReferenceNumber, 
-                           RTRIM(prop_ref)                   AS PropertyReferenceNumber, 
-                           RTRIM(u_saff_rentacc)             AS PaymentReferenceNumber, 
-                           terminated                        AS IsAgreementTerminated, 
-                           tenure                            AS TenureType 
-                    FROM   tenagree 
-                    WHERE  tag_ref = @tenancyAgreementRef 
+					SELECT TNG.cur_bal                                   AS CurrentBalance,
+						   ( TNG.cur_bal *- 1 )                          AS DisplayBalance,
+						   ( TNG.rent + TNG.service + TNG.other_charge ) AS Rent,
+						   TNG.cot                                       AS StartDate,
+						   Rtrim(TNG.house_ref)                          AS HousingReferenceNumber,
+						   Rtrim(PRP.prop_ref)                           AS PropertyReferenceNumber,
+						   Rtrim(TNG.tag_ref)                            AS TenancyAgreementReference,
+						   Rtrim(TNG.u_saff_rentacc)                     AS PaymentReferenceNumber,
+						   TNG.terminated                                AS IsAgreementTerminated,
+						   TNG.tenure                                    AS TenureType
+					FROM   tenagree TNG
+						   INNER JOIN property PRP
+								   ON TNG.prop_ref = PRP.prop_ref
+					WHERE  TNG.u_saff_rentacc = @paymentReferenceNumber
+						   AND REPLACE(PRP.post_code, ' ', '') = @postcode
                 ",
-                new { tenancyAgreementRef }
+                new { paymentReferenceNumber, postcode }
             );
 
             uhtconn.Close();
@@ -144,10 +147,10 @@ namespace UnitTests.V1.Gateways
 
         }
 
-        public List<TenancyTransaction> GetAllTenancyTransactionStatements(string tenancyAgreementId, string startdate, string endDate)
+        public List<TenancyTransaction> GetAllTenancyTransactionStatements(string tenancyAgreementId, string paymentReferenceNumber, string postcode)
         {
-            TenancyAgreementDetails tenantDet = GetTenancyAgreementDetails(tenancyAgreementId);
-            List<TempTenancyTransaction> lstTransactions = GetAllTenancyTransactions(tenancyAgreementId, startdate, endDate);
+            TenancyAgreementDetails tenantDet = GetTenancyAgreementDetails(paymentReferenceNumber, postcode);
+            List<TempTenancyTransaction> lstTransactions = GetAllTenancyTransactions(tenancyAgreementId);
             List<TenancyTransaction> lstTransactionsState = new List<TenancyTransaction>();
             float RecordBalance = 0;
             RecordBalance = float.Parse(tenantDet.CurrentBalance);
