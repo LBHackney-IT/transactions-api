@@ -147,9 +147,8 @@ namespace UnitTests.V1.Gateways
 
         }
 
-        public List<TenancyTransaction> GetAllTenancyTransactionStatements(string tenancyAgreementId, string paymentReferenceNumber, string postcode)
+        public List<TenancyTransaction> GetAllTenancyTransactionStatements(string tenancyAgreementId, TenancyAgreementDetails tenantDet)
         {
-            TenancyAgreementDetails tenantDet = GetTenancyAgreementDetails(paymentReferenceNumber, postcode);
             List<TempTenancyTransaction> lstTransactions = GetAllTenancyTransactions(tenancyAgreementId);
             List<TenancyTransaction> lstTransactionsState = new List<TenancyTransaction>();
             float RecordBalance = 0;

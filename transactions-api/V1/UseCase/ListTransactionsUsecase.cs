@@ -32,7 +32,7 @@ namespace transactions_api.UseCase
             var tenancyDetails = _transactionsGateway.GetTenancyAgreementDetails(request.PaymentRef, request.PostCode) ?? new TenancyAgreementDetails();
 
             var transactions = !String.IsNullOrEmpty(tenancyDetails.TenancyAgreementReference)
-                               ? _transactionsGateway.GetAllTenancyTransactionStatements(tenancyDetails.TenancyAgreementReference, request.PaymentRef, request.PostCode)
+                               ? _transactionsGateway.GetAllTenancyTransactionStatements(tenancyDetails.TenancyAgreementReference, tenancyDetails)
                                : new List<TenancyTransaction>();
 
             return new GetAllTenancyTransactionsResponse()
