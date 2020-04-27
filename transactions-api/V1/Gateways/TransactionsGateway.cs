@@ -64,6 +64,10 @@ namespace UnitTests.V1.Gateways
         {
             SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
             uhtconn.Open();
+            var dbArgs = new DynamicParameters();
+
+            dbArgs.Add("@tenancyAgreementRef", tenancyAgreementRef, System.Data.DbType.String);
+                //dbArgs.Add("@postcode", request.PostCode.Replace(" ", "") + "%", DbType.AnsiString); ;
 
             string query =                                                                                      // not sure how to limit 2 different queries to 5 results (UNION). OFFSET won't work.
                 @" 
@@ -108,7 +112,7 @@ namespace UnitTests.V1.Gateways
                     ORDER  BY post_date DESC, 
                               transno ASC
                 ";
-            var results = uhtconn.Query<TempTenancyTransaction>(query, new { tenancyAgreementRef }, commandTimeout: 0).ToList();  //<--------Can do .Take(5).ToList(); also commandTimeout: 0 is a hack to get around timeout that comes out of nowhere - query runs fine on SQL management studio
+            var results = uhtconn.Query<TempTenancyTransaction>(query, new { @tenancyAgreementRef = new DbString { Value = tenancyAgreementRef, IsFixedLength = true, IsAnsi = true, Length = 11 } }).ToList();  //<--------Can do .Take(5).ToList(); also commandTimeout: 0 is a hack to get around timeout that comes out of nowhere - query runs fine on SQL management studio
             uhtconn.Close();
             return results;
         }
