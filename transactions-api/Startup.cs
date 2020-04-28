@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using transactions_api.Versioning;
 using UnitTests.V1.Infrastructure;
+using FluentValidation.AspNetCore;
+using transactions_api.V1.Validation;
 
 namespace transactions_api
 {
@@ -34,7 +36,7 @@ namespace transactions_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().AddFluentValidation().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddApiVersioning(o =>
             {
                 o.DefaultApiVersion = new ApiVersion(1, 0);
@@ -94,6 +96,7 @@ namespace transactions_api
             ConfigureDbContext(services);
             RegisterGateWays(services);
             RegisterUseCases(services);
+            RegisterValidators(services);
             services.AddMvcCore().AddDataAnnotations();
         }
 
@@ -115,6 +118,11 @@ namespace transactions_api
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddSingleton<IListTransactions, ListTransactionsUsecase>();
+        }
+
+        private static void RegisterValidators(IServiceCollection services)
+        {
+            services.AddTransient<IGetTenancyTransactionsValidator, GetTenancyTransactionsValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -19,6 +19,8 @@ namespace UnitTests.V1.Gateways
             _classUnderTest = new TransactionsGateway(_uhContext);
         }
 
+        #region GetTransaction (in general)
+
         [Test]
         public void ListOfTransactionsImplementsBoundaryInterface()
         {
@@ -63,5 +65,14 @@ namespace UnitTests.V1.Gateways
             Assert.AreEqual(transaction.PeriodNumber,response.PeriodNumber);
             Assert.AreEqual(transaction.FinancialYear,response.FinancialYear);
         }
+
+        #endregion
+
+        #region GetTenancyTransactions
+
+        //Same here all of will need to be separated out for the sake of lowering responsibilities, also this will need to be rewritten to make use of EF Core.
+
+        #endregion
+
     }
 }
