@@ -16,12 +16,14 @@ namespace transactions_api.Controllers.V1
         private readonly IListTransactions _listTransactions;
         private readonly ILogger<TransactionsController> _logger;
         private readonly IGetTenancyTransactionsValidator _getTenancyTransactionsValidator;
+        private readonly IGetTenancyDetailsValidator _getTenancyDetailsValidator;
 
-        public TransactionsController(IListTransactions listTransactions, ILogger<TransactionsController> logger, IGetTenancyTransactionsValidator getTenancyTransactionsValidator)
+        public TransactionsController(IListTransactions listTransactions, ILogger<TransactionsController> logger, IGetTenancyTransactionsValidator getTenancyTransactionsValidator, IGetTenancyDetailsValidator getTenancyDetailsValidator)
         {
             _listTransactions = listTransactions;
             _logger = logger;
             _getTenancyTransactionsValidator = getTenancyTransactionsValidator;
+            _getTenancyDetailsValidator = getTenancyDetailsValidator;
         }
 
         [ProducesResponseType(typeof(ListTransactionsResponse), 200)]
