@@ -81,6 +81,7 @@ namespace transactions_api.Controllers.V1
         [Route("tenancy-details/payment-ref/{payment_ref}/post-code/{post_code}")]                                              //should we add "GetAllTenancyTransactions/" to the start of the url?
         [Produces("application/json")]
         [ProducesResponseType(typeof(GetTenancyDetailsResponse), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 404)]
         public IActionResult GetTenancyDetails([FromRoute] GetTenancyDetailsRequest request)
         {
             _logger.LogInformation(                                                                             //TODO: Add tests for logging! An the rest of the logging. Add logging message formatter.
@@ -88,7 +89,15 @@ namespace transactions_api.Controllers.V1
                 );
 
                     var usecaseResponse = _listTransactions.ExecuteGetTenancyDetails(request);
+
+                    if (usecaseResponse.TenancyDetails != null)
                         return Ok(usecaseResponse);
+                    else
+                        return NotFound(
+                            new ErrorResponse(
+                                $"No tenancy details found for the payment reference = {request.PaymentRef} with the post code = {request.PostCode}"
+                                )
+                            );                                                                                      //I think the ErrorResponse should contain the Request object, but the standards go agains that right now. TODO: A thing to consider during refactoring.
         }
     }
 }
