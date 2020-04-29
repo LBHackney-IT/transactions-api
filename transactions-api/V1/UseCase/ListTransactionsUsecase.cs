@@ -39,8 +39,7 @@ namespace transactions_api.UseCase
             {
                 GeneratedAt = DateTime.Now,
                 Request = request,
-                Transactions = transactions,
-                TenancyDetails = tenancyDetails                                                                         //This is no longer Transactions API... it's getting back Tenancy data!
+                Transactions = transactions
             };
         }
 
