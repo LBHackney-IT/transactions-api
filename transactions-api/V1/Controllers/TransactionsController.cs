@@ -83,6 +83,10 @@ namespace transactions_api.Controllers.V1
         [ProducesResponseType(typeof(GetTenancyDetailsResponse), 200)]
         public IActionResult GetTenancyDetails([FromRoute] GetTenancyDetailsRequest request)
         {
+            _logger.LogInformation(                                                                             //TODO: Add tests for logging! An the rest of the logging. Add logging message formatter.
+                $"The request has hit GetTenancyDetails controller method with the following data. PaymentRef = {request.PaymentRef ?? "null" } and PostCode = {request.PostCode ?? "null"}"
+                );
+
                     var usecaseResponse = _listTransactions.ExecuteGetTenancyDetails(request);
                         return Ok(usecaseResponse);
         }
