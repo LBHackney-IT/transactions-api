@@ -43,5 +43,17 @@ namespace transactions_api.UseCase
                 TenancyDetails = tenancyDetails                                                                         //This is no longer Transactions API... it's getting back Tenancy data!
             };
         }
+
+        public GetTenancyDetailsResponse ExecuteGetTenancyDetails(GetTenancyDetailsRequest request)
+        {
+            var tenancyDetails = _transactionsGateway.GetTenancyAgreementDetails(request.PaymentRef, request.PostCode);
+
+            return new GetTenancyDetailsResponse()
+            {
+                GeneratedAt = DateTime.Now,
+                Request = request,
+                TenancyDetails = tenancyDetails
+            };
+        }
     }
 }

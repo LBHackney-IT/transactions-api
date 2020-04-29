@@ -8,7 +8,7 @@ using transactions_api.V1.Validation;
 namespace transactions_api.Controllers.V1
 {
     [ApiVersion("1")]
-    [Route("api/v1/transactions")]
+    [Route("api/v1")] // the tenancy details endpoint screw this up a bit for now..
     [ApiController]
     [Produces("application/json")]
     public class TransactionsController : BaseController
@@ -26,6 +26,7 @@ namespace transactions_api.Controllers.V1
 
         [ProducesResponseType(typeof(ListTransactionsResponse), 200)]
         [HttpGet]
+        [Route("transactions")]
         public JsonResult GetTransactions([FromQuery]ListTransactionsRequest request)
         {
             _logger.LogInformation("Transactions requested for TagRef: " + request.TagRef);
@@ -34,7 +35,7 @@ namespace transactions_api.Controllers.V1
         }
 
         [HttpGet]
-        [Route("payment-ref/{payment_ref}/post-code/{post_code}")]                                              //should we add "GetAllTenancyTransactions/" to the start of the url?
+        [Route("transactions/payment-ref/{payment_ref}/post-code/{post_code}")]                                              //should we add "GetAllTenancyTransactions/" to the start of the url?
         [Produces("application/json")]
         [ProducesResponseType(typeof(GetAllTenancyTransactionsResponse), 200)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
@@ -74,6 +75,16 @@ namespace transactions_api.Controllers.V1
                     new ErrorResponse(ex.Message)
                     );
             }
+        }
+
+        [HttpGet]
+        [Route("tenancy-details/payment-ref/{payment_ref}/post-code/{post_code}")]                                              //should we add "GetAllTenancyTransactions/" to the start of the url?
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(GetTenancyDetailsResponse), 200)]
+        public IActionResult GetTenancyDetails([FromRoute] GetTenancyDetailsRequest request)
+        {
+                    var usecaseResponse = _listTransactions.ExecuteGetTenancyDetails(request);
+                        return Ok(usecaseResponse);
         }
     }
 }
