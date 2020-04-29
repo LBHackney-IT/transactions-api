@@ -29,11 +29,7 @@ namespace transactions_api.UseCase
 
         public GetAllTenancyTransactionsResponse ExecuteGetTenancyTransactions(GetAllTenancyTransactionsRequest request)
         {
-            var tenancyDetails = _transactionsGateway.GetTenancyAgreementDetails(request.PaymentRef, request.PostCode) ?? new TenancyAgreementDetails();
-
-            var transactions = !String.IsNullOrEmpty(tenancyDetails.TenancyAgreementReference)
-                               ? _transactionsGateway.GetAllTenancyTransactionStatements(tenancyDetails.TenancyAgreementReference, tenancyDetails)
-                               : new List<TenancyTransaction>();
+            var transactions = _transactionsGateway.GetAllTenancyTransactionStatements(request.PaymentRef, request.PostCode) ?? new List<TenancyTransaction>();
 
             return new GetAllTenancyTransactionsResponse()
             {
