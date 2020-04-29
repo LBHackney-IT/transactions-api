@@ -85,12 +85,15 @@ namespace transactions_api.Controllers.V1
         [ProducesResponseType(typeof(GetTenancyDetailsResponse), 200)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
         [ProducesResponseType(typeof(ErrorResponse), 404)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
         public IActionResult GetTenancyDetails([FromRoute] GetTenancyDetailsRequest request)
         {
             _logger.LogInformation(                                                                             //TODO: Add tests for logging! An the rest of the logging. Add logging message formatter.
                 $"The request has hit GetTenancyDetails controller method with the following data. PaymentRef = {request.PaymentRef ?? "null" } and PostCode = {request.PostCode ?? "null"}"
                 );
 
+            try                                                                                                 //TODO: add tests for this. No tests due to this needing to be rushed!
+            {
                 var validationResult = _getTenancyDetailsValidator.Validate(request);
 
                 if (validationResult.IsValid)
@@ -110,6 +113,21 @@ namespace transactions_api.Controllers.V1
                 return BadRequest(
                     new ErrorResponse(validationResult.Errors)
                     );
+            }
+            catch (AggregateException ex) when (ex.InnerException != null)
+            {
+                return StatusCode(
+                    500,
+                    new ErrorResponse(ex.Message, ex.InnerException.Message)
+                    );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    500,
+                    new ErrorResponse(ex.Message)
+                    );
+            }
         }
     }
 }
