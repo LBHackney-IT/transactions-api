@@ -26,6 +26,7 @@ namespace UnitTests.V1.Controllers
 
         private Mock<IListTransactions> _mockListTransacionsUsecase;
         private Mock<IGetTenancyTransactionsValidator> _mockGetTenancyTransactionsValidator;
+        private Mock<IGetTenancyDetailsValidator> _mockGetTenancyDetailsValidator;
 
         private Faker _faker = new Faker("en_GB");
 
@@ -34,8 +35,9 @@ namespace UnitTests.V1.Controllers
         {
             _mockListTransacionsUsecase = new Mock<IListTransactions>();
             _mockGetTenancyTransactionsValidator = new Mock<IGetTenancyTransactionsValidator>();
+            _mockGetTenancyDetailsValidator = new Mock<IGetTenancyDetailsValidator>();
             ILogger<TransactionsController> nullLogger = NullLogger<TransactionsController>.Instance;
-            _classUnderTest = new TransactionsController(_mockListTransacionsUsecase.Object, nullLogger, _mockGetTenancyTransactionsValidator.Object);
+            _classUnderTest = new TransactionsController(_mockListTransacionsUsecase.Object, nullLogger, _mockGetTenancyTransactionsValidator.Object, _mockGetTenancyDetailsValidator.Object);
         }
 
         #region Transactions in General
