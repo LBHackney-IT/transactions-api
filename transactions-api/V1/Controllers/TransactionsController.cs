@@ -83,6 +83,7 @@ namespace transactions_api.Controllers.V1
         [Route("tenancy-details/payment-ref/{payment_ref}/post-code/{post_code}")]                                              //should we add "GetAllTenancyTransactions/" to the start of the url?
         [Produces("application/json")]
         [ProducesResponseType(typeof(GetTenancyDetailsResponse), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 400)]
         [ProducesResponseType(typeof(ErrorResponse), 404)]
         public IActionResult GetTenancyDetails([FromRoute] GetTenancyDetailsRequest request)
         {
@@ -90,6 +91,10 @@ namespace transactions_api.Controllers.V1
                 $"The request has hit GetTenancyDetails controller method with the following data. PaymentRef = {request.PaymentRef ?? "null" } and PostCode = {request.PostCode ?? "null"}"
                 );
 
+                var validationResult = _getTenancyDetailsValidator.Validate(request);
+
+                if (validationResult.IsValid)
+                {
                     var usecaseResponse = _listTransactions.ExecuteGetTenancyDetails(request);
 
                     if (usecaseResponse.TenancyDetails != null)
@@ -100,6 +105,11 @@ namespace transactions_api.Controllers.V1
                                 $"No tenancy details found for the payment reference = {request.PaymentRef} with the post code = {request.PostCode}"
                                 )
                             );                                                                                      //I think the ErrorResponse should contain the Request object, but the standards go agains that right now. TODO: A thing to consider during refactoring.
+                }
+
+                return BadRequest(
+                    new ErrorResponse(validationResult.Errors)
+                    );
         }
     }
 }
