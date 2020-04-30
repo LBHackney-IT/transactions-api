@@ -17,7 +17,7 @@ namespace UnitTests.V1.Gateways
     {
         private readonly IUHContext _uhcontext;
         private readonly TransactionFactory _transactionFactory;
-        private readonly string _uhliveTransconnstring = Environment.GetEnvironmentVariable("UH_URL");
+        private readonly string _uhTransconnstring = Environment.GetEnvironmentVariable("UH_URL");
 
         public TransactionsGateway(IUHContext uhcontext)
         {
@@ -62,12 +62,8 @@ namespace UnitTests.V1.Gateways
 
         public List<TempTenancyTransaction> GetAllTenancyTransactions(string tenancyAgreementRef)
         {
-            SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
+            SqlConnection uhtconn = new SqlConnection(_uhTransconnstring);
             uhtconn.Open();
-            var dbArgs = new DynamicParameters();
-
-            dbArgs.Add("@tenancyAgreementRef", tenancyAgreementRef, System.Data.DbType.String);
-                //dbArgs.Add("@postcode", request.PostCode.Replace(" ", "") + "%", DbType.AnsiString); ;
 
             string query =                                                                                      // not sure how to limit 2 different queries to 5 results (UNION). OFFSET won't work.
                 @" 
@@ -119,7 +115,7 @@ namespace UnitTests.V1.Gateways
 
         public TenancyAgreementDetails GetTenancyAgreementDetails(string paymentReferenceNumber, string postcode)
         {
-            SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
+            SqlConnection uhtconn = new SqlConnection(_uhTransconnstring);
             uhtconn.Open();
 
             postcode = Regex.Replace(postcode, @"\s+", String.Empty);

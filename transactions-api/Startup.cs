@@ -107,7 +107,7 @@ namespace transactions_api
             DbContextOptionsBuilder builder = new DbContextOptionsBuilder()
                 .UseSqlServer(connectionString);
 
-            services.AddSingleton<IUHContext>(s => new UhContext(builder.Options));
+            services.AddTransient<IUHContext>(s => new UhContext(builder.Options));
         }
 
         private static void RegisterGateWays(IServiceCollection services)
