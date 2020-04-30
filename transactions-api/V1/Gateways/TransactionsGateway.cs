@@ -144,50 +144,76 @@ namespace UnitTests.V1.Gateways
             uhtconn.Close();
 
             return result;
-
         }
 
-        public List<TenancyTransaction> GetAllTenancyTransactionStatements(string tenancyAgreementId, TenancyAgreementDetails tenantDet)
+        public List<TenancyTransaction> GetAllTenancyTransactionStatements(string paymentReferenceNumber, string postcode)
         {
-            List<TempTenancyTransaction> lstTransactions = GetAllTenancyTransactions(tenancyAgreementId);
-            List<TenancyTransaction> lstTransactionsState = new List<TenancyTransaction>();
-            float RecordBalance = 0;
-            RecordBalance = float.Parse(tenantDet.CurrentBalance);
+            SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
+            uhtconn.Open();
 
-            foreach (TempTenancyTransaction trans in lstTransactions)
+            postcode = Regex.Replace(postcode, @"\s+", String.Empty);
+
+            var tenantDet = uhtconn.QueryFirstOrDefault<TenancyAgreementDetails>(
+                @"
+					SELECT TNG.cur_bal                                   AS CurrentBalance,
+						   Rtrim(TNG.tag_ref)                            AS TenancyAgreementReference
+					FROM   tenagree TNG
+						   INNER JOIN property PRP
+								   ON TNG.prop_ref = PRP.prop_ref
+					WHERE  TNG.u_saff_rentacc = @paymentReferenceNumber
+						   AND REPLACE(PRP.post_code, ' ', '') = @postcode
+                ",
+                new { paymentReferenceNumber, postcode }
+            );
+
+            uhtconn.Close();
+
+            if (tenantDet != null && !String.IsNullOrEmpty(tenantDet.TenancyAgreementReference))
             {
-                TenancyTransaction statement = new TenancyTransaction();
-                var DebitValue = "";
-                var CreditValue = "";
-                float fDebitValue = 0F;
-                float fCreditValue = 0F;
-                var realvalue = trans.Amount;
-                string DisplayRecordBalance = (-RecordBalance).ToString("c2");
+                List<TempTenancyTransaction> lstTransactions = GetAllTenancyTransactions(tenantDet.TenancyAgreementReference);
 
-                if (realvalue.IndexOf("-") != -1)
+                List<TenancyTransaction> lstTransactionsState = new List<TenancyTransaction>();
+                float RecordBalance = 0;
+                RecordBalance = float.Parse(tenantDet.CurrentBalance);
+
+                foreach (TempTenancyTransaction trans in lstTransactions)
                 {
-                    DebitValue = realvalue;
-                    fDebitValue = float.Parse(DebitValue);
-                    RecordBalance = (RecordBalance - fDebitValue);
-                    DebitValue = (-fDebitValue).ToString("c2");
+                    TenancyTransaction statement = new TenancyTransaction();
+                    var DebitValue = "";
+                    var CreditValue = "";
+                    float fDebitValue = 0F;
+                    float fCreditValue = 0F;
+                    var realvalue = trans.Amount;
+                    string DisplayRecordBalance = (-RecordBalance).ToString("c2");
+
+                    if (realvalue.IndexOf("-") != -1)
+                    {
+                        DebitValue = realvalue;
+                        fDebitValue = float.Parse(DebitValue);
+                        RecordBalance = (RecordBalance - fDebitValue);
+                        DebitValue = (-fDebitValue).ToString("c2");
+                    }
+                    else
+                    {
+                        CreditValue = realvalue;
+                        fCreditValue = float.Parse(CreditValue);
+                        RecordBalance = (RecordBalance - fCreditValue);
+                        CreditValue = (-fCreditValue).ToString("c2");
+                    }
+                    statement.Date = trans.Date;
+                    statement.Description = trans.Description;
+                    statement.In = DebitValue;
+                    statement.Out = CreditValue;
+                    statement.Balance = DisplayRecordBalance;
+                    lstTransactionsState.Add(statement);
                 }
-                else
-                {
-                    CreditValue = realvalue;
-                    fCreditValue = float.Parse(CreditValue);
-                    RecordBalance = (RecordBalance - fCreditValue);
-                    CreditValue = (-fCreditValue).ToString("c2");
-                }
-                statement.Date = trans.Date;
-                statement.Description = trans.Description;
-                statement.In = DebitValue;
-                statement.Out = CreditValue;
-                statement.Balance = DisplayRecordBalance;
-                lstTransactionsState.Add(statement);
+
+                return lstTransactionsState; 
             }
-
-            return lstTransactionsState;
-
+            else
+            {
+                return new List<TenancyTransaction>();
+            }
         }
 
         //---------------------------------- Ported Code from NCC API (end) --------------------------------//

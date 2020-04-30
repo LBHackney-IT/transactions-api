@@ -123,6 +123,7 @@ namespace transactions_api
         private static void RegisterValidators(IServiceCollection services)
         {
             services.AddTransient<IGetTenancyTransactionsValidator, GetTenancyTransactionsValidator>();
+            services.AddTransient<IGetTenancyDetailsValidator, GetTenancyDetailsValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

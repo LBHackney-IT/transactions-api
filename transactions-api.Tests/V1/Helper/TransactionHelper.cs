@@ -102,8 +102,7 @@ namespace UnitTests.V1.Helper
             {
                 GeneratedAt = DateTime.Now,
                 Request = CreateGetAllTenancyTransactionsRequestObject(),
-                Transactions = CreateTenancyTransactionList(5),
-                TenancyDetails = CreateTenancyAgreementDetails()
+                Transactions = CreateTenancyTransactionList(5)
             };
         }
 

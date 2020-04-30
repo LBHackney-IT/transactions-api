@@ -11,6 +11,5 @@ namespace transactions_api.V1.Boundary
         public DateTime GeneratedAt { get; set; }
         public GetAllTenancyTransactionsRequest Request { get; set; }
         public List<TenancyTransaction> Transactions { get; set; }
-        public TenancyAgreementDetails TenancyDetails { get; set; }
     }
 }
