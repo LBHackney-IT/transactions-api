@@ -148,7 +148,7 @@ namespace UnitTests.V1.Gateways
 
         public List<TenancyTransaction> GetAllTenancyTransactionStatements(string paymentReferenceNumber, string postcode)
         {
-            SqlConnection uhtconn = new SqlConnection(_uhliveTransconnstring);
+            SqlConnection uhtconn = new SqlConnection(_uhTransconnstring);
             uhtconn.Open();
 
             postcode = Regex.Replace(postcode, @"\s+", String.Empty);
