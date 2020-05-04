@@ -87,7 +87,6 @@ namespace transactions_api.Tests.V1.Validation
         //"Unit" refers to the letters in the second part of the postcode (i.e. DN, JU) from (SW2 9DN, NE4 7JU)
 
         [TestCase("CR1 3ED")]
-        [TestCase("NE7")]
         public void GivenAPostCodeValueInUpperCase_WhenCallingValidation_ItReturnsNoErrors(string postCode)
         {
             var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
@@ -96,7 +95,6 @@ namespace transactions_api.Tests.V1.Validation
         }
 
         [TestCase("w2 5jq")]
-        [TestCase("ne7")]
         public void GivenAPostCodeValueInLowerCase_WhenCallingValidation_ItReturnsNoErrors(string postCode)
         {
             var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
@@ -107,15 +105,6 @@ namespace transactions_api.Tests.V1.Validation
         [TestCase("w2 5JQ")]
         [TestCase("E11 5ra")]
         public void GivenAPostCodeValueInLowerCaseAndUpperCase_WhenCallingValidation_ItReturnsNoErrors(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
-        }
-
-        [TestCase("w2 ")]
-        [TestCase("E11 ")]
-        public void GivenAnOutcodeWithSpace_WhenCallingValidation_ItReturnsNoErrors(string postCode)
         {
             var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
             request.PostCode = postCode;
@@ -167,25 +156,6 @@ namespace transactions_api.Tests.V1.Validation
             _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
         }
 
-        [TestCase("E9")] //A9
-        [TestCase("S5")]
-        [TestCase("S11")] //A99
-        [TestCase("W12")]
-        [TestCase("NW9")] //AA9
-        [TestCase("RH5")]
-        [TestCase("SW17")] // AA99
-        [TestCase("NE17")]
-        [TestCase("W4R")] // A9A
-        [TestCase("N1C")]
-        [TestCase("NW1W")] // AA9A
-        [TestCase("CR1H")]
-        public void GivenOnlyAnOutcodePartOfPostCode_WhenCallingValidation_ItReturnsNoErrors(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
-        }
-
         [TestCase("E8 1LL")]
         [TestCase("SW17 1JK")]
         public void GivenBothPartsOfPostCode_WhenCallingValidation_ItReturnsNoErrors(string postCode)
@@ -211,24 +181,6 @@ namespace transactions_api.Tests.V1.Validation
             var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
             request.PostCode = postCode;
             _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
-
-        [TestCase("SW11 9")]
-        [TestCase("e14 2")]
-        public void GivenAnOutcodeAndASector_WhenCallingValidation_ItReturnsNoErrors(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
-        }
-
-        [TestCase("SW7 9A")]
-        [TestCase("n12 8F")]
-        public void GivenAnOutcodeAndASectorAndTheFirstLetterOfTheUnit_WhenCallingValidation_ItReturnsNoErrors(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
         }
 
         [TestCase("N8 LL")]
