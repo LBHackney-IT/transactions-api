@@ -21,7 +21,7 @@ namespace transactions_api.V1.Validation
             RuleFor(request => request.PostCode)
                 .NotNull().WithMessage(ErrorMessagesFormatter.FieldIsNullMessage("Postcode"))
                 .NotEmpty().WithMessage(ErrorMessagesFormatter.FieldIsWhiteSpaceOrEmpty("Postcode"))
-                .Matches(new Regex("^((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]))))( )?(([0-9][A-Za-z]?[A-Za-z]?)?))$")) //TODO: change the regex not to accept partial postcodes.
+                .Matches(new Regex("^[A-Za-z]{1,2}[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}$"))
                 .WithMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
         }
     }
