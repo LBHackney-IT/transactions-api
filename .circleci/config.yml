@@ -89,6 +89,7 @@ workflows:
           dockerfile: ./transactions-api/Dockerfile
           path: ./transactions-api
           account-url: temp_AWS_ECR_HOST
+          repo: ""
           aws-access-key-id: temp_AWS_ACCESS_KEY_ID
           aws-secret-access-key: temp_AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
