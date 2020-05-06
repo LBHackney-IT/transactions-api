@@ -6,13 +6,22 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using transactions_api.V1.Boundary;
 using transactions_api.V1.Helpers;
+using transactions_api.V1.Validation.ValidatorBase;
 
 namespace transactions_api.V1.Validation
 {
     public class GetTenancyTransactionsValidator : AbstractValidator<GetAllTenancyTransactionsRequest>, IGetTenancyTransactionsValidator
     {
-        public GetTenancyTransactionsValidator()
+        private readonly IPostCodeBaseValidator _postcodeBaseValidator;
+
+        public GetTenancyTransactionsValidator(IPostCodeBaseValidator postcodeBaseValidator)
         {
+            #region Injecting dependencies
+
+            _postcodeBaseValidator = postcodeBaseValidator;
+
+            #endregion
+
             ValidatorOptions.Global.CascadeMode = CascadeMode.StopOnFirstFailure;
             RuleFor(request => request.PaymentRef)
                 .NotNull().WithMessage(ErrorMessagesFormatter.FieldIsNullMessage("Payment reference"))
@@ -21,7 +30,7 @@ namespace transactions_api.V1.Validation
             RuleFor(request => request.PostCode)
                 .NotNull().WithMessage(ErrorMessagesFormatter.FieldIsNullMessage("Postcode"))
                 .NotEmpty().WithMessage(ErrorMessagesFormatter.FieldIsWhiteSpaceOrEmpty("Postcode"))
-                .Matches(new Regex("^[A-Za-z]{1,2}[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}$"))
+                .Must(_postcodeBaseValidator.ValidatePostCodeFormat)
                 .WithMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
         }
     }

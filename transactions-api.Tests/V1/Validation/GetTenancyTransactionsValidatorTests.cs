@@ -1,4 +1,5 @@
 using FluentValidation.TestHelper;
+using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using transactions_api.V1.Helpers;
 using transactions_api.V1.Validation;
+using transactions_api.V1.Validation.ValidatorBase;
 using UnitTests.V1.Helper;
 
 namespace transactions_api.Tests.V1.Validation
@@ -14,11 +16,13 @@ namespace transactions_api.Tests.V1.Validation
     public class GetTenancyTransactionsValidatorTests
     {
         private GetTenancyTransactionsValidator _validator;
+        private Mock<IPostCodeBaseValidator> _postcodeBaseValidator;
 
         [SetUp]
         public void SetUp()
         {
-            _validator = new GetTenancyTransactionsValidator();
+            _postcodeBaseValidator = new Mock<IPostCodeBaseValidator>();
+            _validator = new GetTenancyTransactionsValidator(_postcodeBaseValidator.Object);
         }
 
         #region Field Is Required [Null]
@@ -78,132 +82,51 @@ namespace transactions_api.Tests.V1.Validation
 
         #region Postcode format validation
 
-        // Below explanations all use the postcodes IG11 7QD and E5 3XW 
-        //"Incode" refers to the whole second part of the postcode (i.e. 3XW, 7QD) from (E11 3XW, W3 7QD)
-        //"Outcode" refers to the whole first part of the postcode (Letter(s) and number(s) - i.e. IG11, E5) from (IG11 9LL, E5 2LL)
-        //"Area" refers to the first letter(s) of the postcode (i.e.  IG, E) from (IG11 9LL, E5 2LL)
-        //"District" refers to first number(s) to appear in the postcode (i.e. 11, 5) from (IG11 9LL, E5 2LL)
-        //"Sector" refers to the number in the second part of the postcode (i.e. 9, 7) from (SW2 9DN, NE4 7JU)
-        //"Unit" refers to the letters in the second part of the postcode (i.e. DN, JU) from (SW2 9DN, NE4 7JU)
-
-        [TestCase("CR1 3ED")]
-        public void GivenAPostCodeValueInUpperCase_WhenCallingValidation_ItReturnsNoErrors(string postCode)
+        [Test]
+        public void given_a_nonempty_request_when_GetTenancyTransactionsValidator_is_called_then_it_calls_PostCodeBaseValidator()       // non-empty because we want to stop on first failure.
         {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
+            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+
+            _validator.Validate(nonemptyRequest);
+
+            _postcodeBaseValidator.Verify(bv => bv.ValidatePostCodeFormat(It.IsAny<string>()), Times.Once);
         }
 
-        [TestCase("w2 5jq")]
-        public void GivenAPostCodeValueInLowerCase_WhenCallingValidation_ItReturnsNoErrors(string postCode)
+        [Test]
+        public void given_a_nonempty_request_when_GetTenancyTransactionsValidator_is_called_then_it_calls_PostCodeBaseValidator_with_the_PostCode_from_the_request()
         {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
+            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+
+            _validator.Validate(nonemptyRequest);
+
+            _postcodeBaseValidator.Verify(bv => bv.ValidatePostCodeFormat(nonemptyRequest.PostCode), Times.Once);
         }
 
-        [TestCase("w2 5JQ")]
-        [TestCase("E11 5ra")]
-        public void GivenAPostCodeValueInLowerCaseAndUpperCase_WhenCallingValidation_ItReturnsNoErrors(string postCode)
+        [Test]
+        public void given_a_nonempty_request_with_valid_PostCode_format_when_GetTenancyTransactionsValidator_is_called_then_it_returns_no_error()
         {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
+            //arange
+            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+
+            _postcodeBaseValidator.Setup(bv => bv.ValidatePostCodeFormat(It.IsAny<string>())).Returns(true);                            // setup to trigger successful validation
+
+            //act, assert
+            _validator.ShouldNotHaveValidationErrorFor(req => req.PostCode, nonemptyRequest);
         }
 
-        [TestCase("CR13ED")]
-        [TestCase("RE15AD")]
-        public void GivenPostCodeValueWithoutSpaces_WhenCallingValidation_ItReturnsNoErrors(string postCode)
+        [Test]
+        public void given_a_nonempty_request_with_invalid_PostCode_format_when_GetTenancyTransactionsValidator_is_called_then_it_returns_an_error_with_correct_message()
         {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
-        }
+            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
 
-        [TestCase("NW")]
-        [TestCase("E")]
-        public void GivenOnlyAnAreaPartOfThePostCode_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
+            _postcodeBaseValidator.Setup(bv => bv.ValidatePostCodeFormat(It.IsAny<string>())).Returns(false);                           // setup to trigger failed validation
 
-        [TestCase("17 9LL")]
-        [TestCase("8 1LA")]
-        public void GivenOnlyAnIncodeAndADistrictPartsOfThePostCode_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
-
-        [TestCase("NW 9LL")]
-        [TestCase("NR1LW")]
-        public void GivenOnlyAnIncodeAndAnAreaPartsOfThePostCode_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
-
-        [TestCase("1LL")]
-        [TestCase(" 6BQ")]
-        public void GivenOnlyAnIncodePartOfThePostCode_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
-
-        [TestCase("E8 1LL")]
-        [TestCase("SW17 1JK")]
-        public void GivenBothPartsOfPostCode_WhenCallingValidation_ItReturnsNoErrors(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldNotHaveValidationErrorFor(x => x.PostCode, request);
-        }
-
-        [TestCase("IG117QDfdsfdsfd")]
-        [TestCase("E1llolol")]
-        public void GivenAValidPostcodeFolowedByRandomCharacters_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
-
-        [TestCase("EEE")]
-        [TestCase("THE")]
-        public void GivenThreeCharacters_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
-
-        [TestCase("N8 LL")]
-        [TestCase("NW11 AE")]
-        public void GivenAnOutcodeAndAUnit_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
-        }
-
-        [TestCase("S10 H")]
-        [TestCase("W1 J")]
-        public void GivenAnOutcodeAndOnlyOneLetterOfAUnit_WhenCallingValidation_ItReturnsAnError(string postCode)
-        {
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-            request.PostCode = postCode;
-            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, request).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
+            _validator.ShouldHaveValidationErrorFor(x => x.PostCode, nonemptyRequest).WithErrorMessage(ErrorMessagesFormatter.FieldWithIncorrectFormat("postcode"));
         }
 
         #endregion
 
-        #region format is valid tests
+        #region Payment Ref validity tests
 
         [Test]
         public void given_a_request_with_valid_PaymentRef_when_GetTenancyTransactionsValidator_is_called_then_it_returns_no_error()
@@ -213,16 +136,6 @@ namespace transactions_api.Tests.V1.Validation
 
             //act, assert
             _validator.ShouldNotHaveValidationErrorFor(req => req.PaymentRef, request);
-        }
-
-        [Test]
-        public void given_a_request_with_valid_PostCode_when_GetTenancyTransactionsValidator_is_called_then_it_returns_no_error() //if this ever fails, it's probably because faker isn't generating correct code
-        {
-            //arange
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
-
-            //act, assert
-            _validator.ShouldNotHaveValidationErrorFor(req => req.PostCode, request);
         }
 
         #endregion
