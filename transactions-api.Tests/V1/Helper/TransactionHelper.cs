@@ -92,6 +92,15 @@ namespace UnitTests.V1.Helper
             };
         }
 
+        public static GetTenancyDetailsRequest CreateGetTenancyDetailsRequestObject()
+        {
+            return new GetTenancyDetailsRequest()
+            {
+                PaymentRef = _faker.Random.Hash(),
+                PostCode = _faker.Address.ZipCode()
+            };
+        }
+
         #endregion
 
         #region Create Random Response Objects
