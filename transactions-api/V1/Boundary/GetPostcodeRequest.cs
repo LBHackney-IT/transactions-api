@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace transactions_api.V1.Boundary
 {
     public class GetPostcodeRequest
     {
-        [FromRoute(Name = "payment_ref")] public string PaymentRef { get; set; }
+        [Required] public string PaymentRef { get; set; }
     }
 }

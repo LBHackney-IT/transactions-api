@@ -37,12 +37,12 @@ namespace transactions_api.Controllers.V1
         }
 
         [HttpGet]
-        [Route("getpostcode/payment-ref/{payment_ref}")]                                              
+        [Route("postcode")]                                              
         [Produces("application/json")]
         [ProducesResponseType(typeof(GetPostcodeResponse), 200)]
         [ProducesResponseType(typeof(ErrorResponse), 400)]
         [ProducesResponseType(typeof(ErrorResponse), 500)]
-        public IActionResult GetPostcode([FromRoute] GetPostcodeRequest request)
+        public JsonResult GetPostcode([FromQuery] GetPostcodeRequest request)
         {
             _logger.LogInformation("Postcode requested for PaymentRef: " + request.PaymentRef);
             var usecaseresponse = _listTransactions.ExecuteGetPostcode(request);
