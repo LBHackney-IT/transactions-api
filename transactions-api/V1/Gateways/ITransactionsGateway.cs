@@ -9,5 +9,6 @@ namespace UnitTests.V1.Gateways
         List<TenancyTransaction> GetAllTenancyTransactionStatements(string paymentReferenceNumber, string postcode);
         TenancyAgreementDetails GetTenancyAgreementDetails(string paymentReferenceNumber, string postcode);
         List<TempTenancyTransaction> GetAllTenancyTransactions(string tenancyAgreementRef);
+        string GetPostcodeByPaymentRef(string paymentReferenceNumber);
     }
 }

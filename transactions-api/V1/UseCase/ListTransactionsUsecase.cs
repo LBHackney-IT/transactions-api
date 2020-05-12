@@ -50,5 +50,13 @@ namespace transactions_api.UseCase
                 TenancyDetails = tenancyDetails
             };
         }
+
+        public GetPostcodeResponse ExecuteGetPostcode(GetPostcodeRequest request)
+        {
+            var postCode = _transactionsGateway.GetPostcodeByPaymentRef(request.PaymentRef);
+
+            return new GetPostcodeResponse()
+            { PostCode = postCode.Trim() };
+        }
     }
 }

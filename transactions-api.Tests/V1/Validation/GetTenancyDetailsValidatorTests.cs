@@ -13,25 +13,25 @@ using UnitTests.V1.Helper;
 namespace transactions_api.Tests.V1.Validation
 {
     [TestFixture]
-    public class GetTenancyTransactionsValidatorTests
+    public class GetTenancyDetailsValidatorTests
     {
-        private GetTenancyTransactionsValidator _validator;
+        private GetTenancyDetailsValidator _validator;
         private Mock<IPostCodeBaseValidator> _postcodeBaseValidator;
 
         [SetUp]
         public void SetUp()
         {
             _postcodeBaseValidator = new Mock<IPostCodeBaseValidator>();
-            _validator = new GetTenancyTransactionsValidator(_postcodeBaseValidator.Object);
+            _validator = new GetTenancyDetailsValidator(_postcodeBaseValidator.Object);
         }
 
         #region Field Is Required [Null]
 
         [Test]
-        public void given_a_request_with_null_PaymentRef_when_GetTenancyTransactionsValidator_is_called_then_it_returns_an_error()
+        public void given_a_request_with_null_PaymentRef_when_GetTenancyDetailsValidator_is_called_then_it_returns_an_error()
         {
             //arrange
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var request = TransactionHelper.CreateGetTenancyDetailsRequestObject();
             request.PaymentRef = null;
 
             //act, assert
@@ -39,10 +39,10 @@ namespace transactions_api.Tests.V1.Validation
         }
 
         [Test]
-        public void given_a_request_with_null_PostCode_when_GetTenancyTransactionsValidator_is_called_then_it_returns_an_error()
+        public void given_a_request_with_null_PostCode_when_GetTenancyDetailsValidator_is_called_then_it_returns_an_error()
         {
             //arrange
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var request = TransactionHelper.CreateGetTenancyDetailsRequestObject();
             request.PostCode = null;
 
             //act, assert
@@ -56,10 +56,10 @@ namespace transactions_api.Tests.V1.Validation
 
         [TestCase("")]
         [TestCase(" ")]
-        public void given_a_request_with_empty_or_whitespace_PaymentRef_when_GetTenancyTransactionsValidator_is_called_then_it_returns_an_error(string paymentRef)
+        public void given_a_request_with_empty_or_whitespace_PaymentRef_when_GetTenancyDetailsValidator_is_called_then_it_returns_an_error(string paymentRef)
         {
             //arrange
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var request = TransactionHelper.CreateGetTenancyDetailsRequestObject();
             request.PaymentRef = paymentRef;
 
             //act, assert
@@ -68,10 +68,10 @@ namespace transactions_api.Tests.V1.Validation
 
         [TestCase("")]
         [TestCase(" ")]
-        public void given_a_request_with_empty_or_whitespace_PostCode_when_GetTenancyTransactionsValidator_is_called_then_it_returns_an_error(string postCode)
+        public void given_a_request_with_empty_or_whitespace_PostCode_when_GetTenancyDetailsValidator_is_called_then_it_returns_an_error(string postCode)
         {
             //arrange
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var request = TransactionHelper.CreateGetTenancyDetailsRequestObject();
             request.PostCode = postCode;
 
             //act, assert
@@ -83,9 +83,9 @@ namespace transactions_api.Tests.V1.Validation
         #region Postcode format validation
 
         [Test]
-        public void given_a_nonempty_request_when_GetTenancyTransactionsValidator_is_called_then_it_calls_PostCodeBaseValidator()       // non-empty because we want to stop on first failure.
+        public void given_a_nonempty_request_when_GetTenancyDetailsValidator_is_called_then_it_calls_PostCodeBaseValidator()       // non-empty because we want to stop on first failure.
         {
-            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var nonemptyRequest = TransactionHelper.CreateGetTenancyDetailsRequestObject();
 
             _validator.Validate(nonemptyRequest);
 
@@ -93,9 +93,9 @@ namespace transactions_api.Tests.V1.Validation
         }
 
         [Test]
-        public void given_a_nonempty_request_when_GetTenancyTransactionsValidator_is_called_then_it_calls_PostCodeBaseValidator_with_the_PostCode_from_the_request()
+        public void given_a_nonempty_request_when_GetTenancyDetailsValidator_is_called_then_it_calls_PostCodeBaseValidator_with_the_PostCode_from_the_request()
         {
-            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var nonemptyRequest = TransactionHelper.CreateGetTenancyDetailsRequestObject();
 
             _validator.Validate(nonemptyRequest);
 
@@ -103,10 +103,10 @@ namespace transactions_api.Tests.V1.Validation
         }
 
         [Test]
-        public void given_a_nonempty_request_with_valid_PostCode_format_when_GetTenancyTransactionsValidator_is_called_then_it_returns_no_error()
+        public void given_a_nonempty_request_with_valid_PostCode_format_when_GetTenancyDetailsValidator_is_called_then_it_returns_no_error()
         {
             //arange
-            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var nonemptyRequest = TransactionHelper.CreateGetTenancyDetailsRequestObject();
 
             _postcodeBaseValidator.Setup(bv => bv.ValidatePostCodeFormat(It.IsAny<string>())).Returns(true);                            // setup to trigger successful validation
 
@@ -115,9 +115,9 @@ namespace transactions_api.Tests.V1.Validation
         }
 
         [Test]
-        public void given_a_nonempty_request_with_invalid_PostCode_format_when_GetTenancyTransactionsValidator_is_called_then_it_returns_an_error_with_correct_message()
+        public void given_a_nonempty_request_with_invalid_PostCode_format_when_GetTenancyDetailsValidator_is_called_then_it_returns_an_error_with_correct_message()
         {
-            var nonemptyRequest = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var nonemptyRequest = TransactionHelper.CreateGetTenancyDetailsRequestObject();
 
             _postcodeBaseValidator.Setup(bv => bv.ValidatePostCodeFormat(It.IsAny<string>())).Returns(false);                           // setup to trigger failed validation
 
@@ -129,10 +129,10 @@ namespace transactions_api.Tests.V1.Validation
         #region Payment Ref validity tests
 
         [Test]
-        public void given_a_request_with_valid_PaymentRef_when_GetTenancyTransactionsValidator_is_called_then_it_returns_no_error()
+        public void given_a_request_with_valid_PaymentRef_when_GetTenancyDetailsValidator_is_called_then_it_returns_no_error()
         {
             //arange
-            var request = TransactionHelper.CreateGetAllTenancyTransactionsRequestObject();
+            var request = TransactionHelper.CreateGetTenancyDetailsRequestObject();
 
             //act, assert
             _validator.ShouldNotHaveValidationErrorFor(req => req.PaymentRef, request);

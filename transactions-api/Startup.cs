@@ -20,6 +20,7 @@ using transactions_api.Versioning;
 using UnitTests.V1.Infrastructure;
 using FluentValidation.AspNetCore;
 using transactions_api.V1.Validation;
+using transactions_api.V1.Validation.ValidatorBase;
 
 namespace transactions_api
 {
@@ -96,6 +97,7 @@ namespace transactions_api
             ConfigureDbContext(services);
             RegisterGateWays(services);
             RegisterUseCases(services);
+            RegisterValidatorBases(services);
             RegisterValidators(services);
             services.AddMvcCore().AddDataAnnotations();
         }
@@ -118,6 +120,11 @@ namespace transactions_api
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddSingleton<IListTransactions, ListTransactionsUsecase>();
+        }
+
+        private static void RegisterValidatorBases(IServiceCollection services)
+        {
+            services.AddTransient<IPostCodeBaseValidator, PostCodeBaseValidator>();
         }
 
         private static void RegisterValidators(IServiceCollection services)

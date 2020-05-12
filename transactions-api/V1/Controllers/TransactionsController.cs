@@ -37,6 +37,20 @@ namespace transactions_api.Controllers.V1
         }
 
         [HttpGet]
+        [Route("postcode")]                                              
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(GetPostcodeResponse), 200)]
+        [ProducesResponseType(typeof(ErrorResponse), 400)]
+        [ProducesResponseType(typeof(ErrorResponse), 500)]
+        public JsonResult GetPostcode([FromQuery] GetPostcodeRequest request)
+        {
+            _logger.LogInformation("Postcode requested for PaymentRef: " + request.PaymentRef);
+            var usecaseresponse = _listTransactions.ExecuteGetPostcode(request);
+            return new JsonResult(usecaseresponse) { StatusCode = 200 };
+
+        }
+
+        [HttpGet]
         [Route("transactions/payment-ref/{payment_ref}/post-code/{post_code}")]                                              //should we add "GetAllTenancyTransactions/" to the start of the url?
         [Produces("application/json")]
         [ProducesResponseType(typeof(GetAllTenancyTransactionsResponse), 200)]
