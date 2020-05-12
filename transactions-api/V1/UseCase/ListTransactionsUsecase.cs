@@ -56,7 +56,7 @@ namespace transactions_api.UseCase
             var postCode = _transactionsGateway.GetPostcodeByPaymentRef(request.PaymentRef);
 
             return new GetPostcodeResponse()
-            { PostCode = postCode.Trim() };
+            { PostCode = (postCode == null ? postCode : postCode.Trim()) };
         }
     }
 }
