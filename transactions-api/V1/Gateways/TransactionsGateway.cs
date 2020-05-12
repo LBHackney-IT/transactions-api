@@ -56,6 +56,20 @@ namespace UnitTests.V1.Gateways
 
         #endregion
 
+        public string GetPostcodeByPaymentRef(string paymentReferenceNumber)
+        {
+            SqlConnection uhtconn = new SqlConnection(_uhTransconnstring);
+            uhtconn.Open();
+            string query =                                                                                     
+                @"SELECT PRP.post_code FROM   Property PRP
+						   INNER JOIN tneagree TNG
+								   ON TNG.prop_ref = PRP.prop_ref
+					WHERE  TNG.u_saff_rentacc = @paymentReferenceNumber ";
+            var result = uhtconn.QueryFirstOrDefault<string>(query, new { @paymentReferenceNumber = new DbString { Value = paymentReferenceNumber, IsFixedLength = true, IsAnsi = true, Length = 11 } }).ToList();  
+            uhtconn.Close();
+            return result.ToString();
+        }
+
         #region GetTenancyTransactions
 
         //---------------------------------- Ported Code from NCC API (start) --------------------------------//
@@ -66,7 +80,7 @@ namespace UnitTests.V1.Gateways
             uhtconn.Open();
 
             string query =                                                                                      // not sure how to limit 2 different queries to 5 results (UNION). OFFSET won't work.
-                @" 
+                @"
                     SELECT transno, 
                            rtrans.real_value AS Amount, 
                            rtrans.post_date  AS Date, 
@@ -215,6 +229,8 @@ namespace UnitTests.V1.Gateways
                 return new List<TenancyTransaction>();
             }
         }
+
+        
 
         //---------------------------------- Ported Code from NCC API (end) --------------------------------//
 
