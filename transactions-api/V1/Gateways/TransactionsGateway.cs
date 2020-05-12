@@ -61,13 +61,13 @@ namespace UnitTests.V1.Gateways
             SqlConnection uhtconn = new SqlConnection(_uhTransconnstring);
             uhtconn.Open();
             string query =                                                                                     
-                @"SELECT PRP.post_code FROM   Property PRP
-						   INNER JOIN tneagree TNG
+                @"SELECT PRP.post_code FROM property PRP
+						   INNER JOIN tenagree TNG
 								   ON TNG.prop_ref = PRP.prop_ref
 					WHERE  TNG.u_saff_rentacc = @paymentReferenceNumber ";
-            var result = uhtconn.QueryFirstOrDefault<string>(query, new { @paymentReferenceNumber = new DbString { Value = paymentReferenceNumber, IsFixedLength = true, IsAnsi = true, Length = 11 } }).ToList();  
+            var result = uhtconn.QueryFirstOrDefault<string>(query, new { @paymentReferenceNumber = new DbString { Value = paymentReferenceNumber, IsFixedLength = true, IsAnsi = true, Length = 11 } });  
             uhtconn.Close();
-            return result.ToString();
+            return result;
         }
 
         #region GetTenancyTransactions
