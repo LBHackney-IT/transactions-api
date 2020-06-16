@@ -34,7 +34,7 @@ namespace UnitTests.V1.Helper
         {
             return new TempTenancyTransaction()
             {
-                Date = _faker.Date.Past().ToString("dd/MM/yyyy HH:mm:ss"),
+                Date = _faker.Date.Past(),
                 Amount = _faker.Finance.Amount(-500, 500, 2).ToString(),
                 Type = _faker.Random.Word(),
                 Description = _faker.Random.Words(3)
